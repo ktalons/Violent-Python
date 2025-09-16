@@ -26,43 +26,10 @@
 >   - **Intro to ML:** pandas + scikit-learn for basic classifiers.
 > 
 > This repo focuses on the core scripting assignments and placeholders for the rest.
-
-#### 🔗 Repo Structure
-
-```
-.
-├─ run_it.py                      # clickable-logo overview GUI
-├─ requirements.txt               
-├─ assets/
-│  └─ python-logo.png             # 512px transparent logo (add your own)
-└─ assignments/
-   ├─ 01_string_search/
-   ├─ 02_firewall_parser/
-   ├─ 03_hashing_forensics/
-   ├─ 04_file_processor_oop/
-   ├─ 05_pil_search_images/
-   ├─ 06_exif_geotag_extractor/
-   ├─ 07_memory_regex_extract/
-   ├─ 08_memory_unique_strings/
-   ├─ 09_web_crawler_scraper/
-   ├─ 10_tcp_server/
-   ├─ 11_tcp_client/
-   ├─ 12_packet_sniffer/
-   ├─ 13_pcap_asset_mapping/
-   ├─ 14_lsb_steganography/
-   ├─ 15_hashtag_collector/
-   ├─ 16_social_graph_harvest/
-   ├─ 17_nltk_transcript_analysis/
-   ├─ 18_mp3_id3_carver/
-   ├─ 19_virustotal_client/
-   ├─ 20_tbd/
-   ├─ 21_tbd/
-   └─ 22_tbd/
-```
-
+>
 > Each assignment folder includes:
 > - README.md with goals, approach, and results.
-> - A *.py script and sample data if allowed.
+> - *.py assignment script and sample data if allowed.
 ---
 
 ## ⚙️ Quick Setup
