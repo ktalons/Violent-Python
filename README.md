@@ -32,22 +32,10 @@
 > - *.py assignment script and sample data if allowed.
 ---
 
-## ⚙️ Quick Setup
+## ⚙️ Quick Setup on Linux
 > 1. Clone this repository to run showcase script and demo scripts
 ```
-git clone https://github.com/ktalons/Violent-Python-Portfolio.git
-```
-> 2. Create a virtualenv _*optional but recommended*_
-```
-python3 -m venv .venv && source .venv/bin/activate
-```
-> 3. Install shared dependancies used in scripts _*optional but recommended*_
-```
-pip install -r requirements.txt
-```
-> 4. Run to start the showcase:  
-```
-python3 run_it.py
+git clone https://github.com/ktalons/Violent-Python.git
 ```
 ---
 
