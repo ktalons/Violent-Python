@@ -1,0 +1,15 @@
+# macOS requirements for Violent-Python Showcase
+#
+# This file lists Python packages and suggests OS-level tools to improve the
+# experience when running scripts from the GUI.
+#
+# OS packages (install via Homebrew):
+#   brew install --cask iterm2
+# Optional terminals:
+#   brew install kitty wezterm alacritty
+#
+# Python packages (installed with pip):
+# Pillow is optional; enables animated GIF splash and image handling
+pillow
+# PrettyTable used by assignments/05_pil_search_images.py
+prettytable

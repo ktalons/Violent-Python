@@ -24,16 +24,16 @@ def repo_default_dir() -> Path:
 
     # Attempts to find the repo root by looking for a .git folder
     for parent in [script.parent] + list(script.parents):
-        repo_path = parent / "assets" / "week_4" / "testImages"
+        repo_path = parent / "assignments" / "05_pil_search_images" / "testImages"
         if repo_path.is_dir():
             return repo_path
 
         # If we find a repo root marker, use it even if the folder isn't created yet
         if (parent / ".git").exists():
-            return parent / "assets" / "week_4" / "testImages"
+            return parent / "assignments" / "05_pil_search_images" / "testImages"
 
     # Fallback: if your script lives in <repo>/assignments/..., step up one level
-    return script.parent.parent / "assets" / "week_4" / "testImages"
+    return script.parent.parent / "assignments" / "05_pil_images" / "testImages"
 
 DEFAULT_DIR = repo_default_dir()
 

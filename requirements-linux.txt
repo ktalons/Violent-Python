@@ -1,0 +1,25 @@
+# Linux requirements for Violent-Python Showcase
+#
+# This file lists Python packages and suggests OS-level tools to improve the
+# experience when running scripts from the GUI.
+#
+# OS packages (Debian/Ubuntu):
+#   sudo apt-get update && sudo apt-get install -y xterm python3-tk
+# Optional terminals:
+#   sudo apt-get install -y kitty wezterm alacritty gnome-terminal konsole
+#
+# OS packages (Fedora/RHEL):
+#   sudo dnf install -y xterm python3-tkinter
+# Optional terminals:
+#   sudo dnf install -y kitty wezterm alacritty gnome-terminal konsole
+#
+# OS packages (Arch/Manjaro):
+#   sudo pacman -S --noconfirm xterm tk
+# Optional terminals:
+#   sudo pacman -S --noconfirm kitty wezterm alacritty gnome-terminal konsole
+#
+# Python packages (installed with pip):
+# Pillow is optional; enables animated GIF splash and image handling
+pillow
+# PrettyTable used by assignments/05_pil_search_images.py
+prettytable

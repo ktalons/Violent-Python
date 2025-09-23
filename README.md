@@ -3,41 +3,152 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-blue)](#)
 [![Course](https://img.shields.io/badge/Course-CYBV%20473-%23CC0033)](#)
 [![Status](https://img.shields.io/badge/Status-Active-green)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> A curated collection of my scripting assignments, showcasing practical Python for offensive & defensive cybersecurity tasks which include networking, forensics, web scraping, packet analysis, steganography, API work, and more.
+A curated collection of scripting assignments demonstrating practical Python for cybersecurity coursework. Includes a Tkinter GUI to browse and run scripts.
+
+> Educational use only. Do not use these scripts to violate policies or laws.
 
 ---
 
-## 📂 Overview of Contents
+## 🚀 Quick start
 
-> This portfolio maps to the course’s weekly focus areas:
->   - **Core Python & file I/O:** string searching, parsing firewall logs, hashing for forensics.
->   - **OOP & utilities:** building reusable file processing helpers.
->   - **Images & EXIF:** search photos, extract metadata & geolocation.
->   - **Binary & memory:** regex extractions, unique strings from dumps.
->   - **Web content:** crawling & BeautifulSoup-powered scraping.
->   - **Sockets & scanning:** TCP client/server, sniffer, passive mapping.
->   - **PCAP & Scapy:** asset extraction & analysis pipelines.
->   - **Steganography:** LSB techniques in true-color images.
->   - **Social data:** hashtag and timeline collection via API.
->   - **NLP:** text parsing and analysis with NLTK.
->   - **Media carving:** MP3 ID3 frame extraction.
->   - **Malware intel:** VirusTotal client for file checks.
->   - **Intro to ML:** pandas + scikit-learn for basic classifiers.
-> 
-> This repo focuses on the core scripting assignments and placeholders for the rest.
->
-> Each assignment folder includes:
-> - README.md with goals, approach, and results.
-> - *.py assignment script and sample data if allowed.
+- macOS/Linux (recommended):
+  ```bash
+  ./start.sh
+  ```
+- Windows (PowerShell):
+  ```powershell
+  ./start.ps1
+  ```
+- Manual (any OS):
+  ```bash
+  python3 -m venv .venv
+  source .venv/bin/activate  # Windows: .venv\Scripts\Activate.ps1
+  python -m pip install -r requirements.txt
+  python main.py
+  ```
+
+Notes
+- The Setup screen can preview and install OS-specific requirement files (requirements-<os>.txt).
+- The Showcase screen auto-discovers `*.py` under `./assignments/*/`, previews code, and runs a selected script.
+- Splash image: prefers `assets/logo.gif` (animated when Pillow is installed), then `assets/python-logo.png`.
+
 ---
 
-## ⚙️ Quick Setup on Linux
-> 1. Clone this repository to run showcase script and demo scripts
+## 📦 Dependencies
+
+This repo is mostly standard-library Python; a few scripts use third-party packages:
+- Pillow (optional) for images/splash animation
+- PrettyTable for tabular CLI output (Assignment 05)
+
+OS-specific requirement files are provided:
+- requirements-macos.txt
+- requirements-linux.txt
+- requirements-windows.txt
+
+The generic requirements.txt is intentionally minimal. Use the OS-specific files via the GUI or install the two packages above when needed.
+
+---
+
+## 🗂️ Repository structure
+
 ```
-git clone https://github.com/ktalons/Violent-Python.git
+Violent-Python/
+├─ main.py                     # Tkinter GUI to run/preview assignments
+├─ start.sh                    # macOS/Linux launcher (creates .venv, checks Tk)
+├─ start.ps1                   # Windows launcher (creates .venv, checks Tk)
+├─ assignments/
+│  ├─ 00_showcase_check/        # GUI pre-flight checks and helpers
+│  │  ├─ show_env.py           # Prints Python/Tk/Pillow availability and versions
+│  │  └─ showcase.py           # Minimal sample to validate GUI runner via terminal
+│  ├─ 01_string_search/
+│  ├─ 02_firewall_parser/
+│  ├─ 03_hashing_forensics/
+│  ├─ 04_file_processor_oop/
+│  ├─ 05_pil_search_images/
+│  ├─ 06_exif_geotag_extractor/
+│  ├─ 07_memory_regex_extract/
+│  ├─ 08_memory_unique_strings/
+│  ├─ 09_web_crawler_scraper/
+│  ├─ 10_tcp_server/
+│  ├─ 11_tcp_client/
+│  ├─ 12_packet_sniffer/
+│  ├─ 13_pcap_asset_mapping/
+│  ├─ 14_lsb_steganography/
+│  ├─ 15_hashtag_collector/
+│  ├─ 16_social_graph_harvest/
+│  ├─ 17_nltk_transcript_analysis/
+│  ├─ 18_mp3_id3_carver/
+│  ├─ 19_virustotal_client/
+│  └─ 20_tbd/
+├─ assets/
+│  ├─ python-logo.png
+│  ├─ screenshots/
+│  │  ├─ splash.png            # add your screenshot
+│  │  ├─ setup.png             # add your screenshot
+│  │  └─ showcase.png          # add your screenshot
+│  └─ week1/
+│     ├─ README.md
+│     └─ redhat.txt            # sample log referenced by assignment 02
+├─ requirements.txt
+├─ requirements-macos.txt
+├─ requirements-linux.txt
+├─ requirements-windows.txt
+├─ .github/workflows/close-prs.yml
+├─ LICENSE
+├─ README.md
+└─ WARP.md
 ```
+
 ---
 
-## 🎓 Academic Integrity & Use
-> This repo exists to document my learning and demonstrate my learned skills. The code here is my own work and nothing in this repository should be used to violate the [UA Code of Academic Integrity](https://deanofstudents.arizona.edu/policies/code-academic-integrity). Keep submissions independent unless collaboration is explicitly allowed and cite sources appropriately.
+## 🖥️ GUI Showcase (Tkinter)
+
+The desktop app lets you:
+- Install/preview OS-specific requirements
+- Discover `./assignments/*/*.py` automatically
+- Preview syntax-highlighted code
+- Run a selected script in your preferred terminal
+
+The GUI stores a small JSON preferences file at `.vp_showcase_prefs.json` for terminal selection and first-run notices.
+
+---
+
+## 🖼️ Screenshots
+
+- Splash: assets/screenshots/splash.png
+- Setup: assets/screenshots/setup.png
+- Showcase: assets/screenshots/showcase.png
+
+## 🧩 Troubleshooting
+
+- Tkinter not available
+  - macOS: install Python from python.org or `brew install python`, then recreate `.venv`.
+  - Linux: install `python3-tk` (Debian/Ubuntu) or `python3-tkinter` (Fedora/RHEL) and recreate `.venv`.
+  - Windows: install Python 3 (includes Tk) and recreate `.venv`.
+- 03_hashing_forensics.py is slow
+  - Run it from a small directory you intend to scan, not the repo root.
+- 02_firewall_parser.py can’t find redhat.txt
+  - Place `redhat.txt` in the current working directory or run the script from where the file lives.
+
+---
+
+## 📖 Academic integrity and responsible use
+
+This repository documents my learning. It should not be used to violate the
+[UA Code of Academic Integrity](https://deanofstudents.arizona.edu/policies/code-academic-integrity)
+or any applicable laws/policies. Keep submissions independent unless collaboration is explicitly allowed and cite sources.
+
+---
+
+## 🤝 Contributing
+
+Pull requests are not accepted directly in this repository (see `.github/workflows/close-prs.yml`).
+If you have suggestions, feel free to open an issue or fork the repo and share a link to your changes.
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License — see [LICENSE](LICENSE).

@@ -1,0 +1,16 @@
+# Windows requirements for Violent-Python Showcase
+#
+# This file lists Python packages and suggests OS-level tools to improve the
+# experience when running scripts from the GUI.
+#
+# OS packages (install via winget):
+#   winget install --id Microsoft.WindowsTerminal -e --source msstore --accept-source-agreements --accept-package-agreements
+# Optional terminals:
+#   winget install -e --id Kitty.Kitty
+#   winget install -e --id WezTerm.WezTerm
+#
+# Python packages (installed with pip):
+# Pillow is optional; enables animated GIF splash and image handling
+pillow
+# PrettyTable used by assignments/05_pil_search_images.py
+prettytable

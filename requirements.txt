@@ -1,0 +1,9 @@
+# Base Python dependencies for Violent-Python Showcase
+# pip will ignore comments and blank lines
+
+# Image handling and optional GIF support
+pillow
+
+# Table formatting used by some assignments
+prettytable
+

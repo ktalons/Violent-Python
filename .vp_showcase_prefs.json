@@ -1,0 +1,10 @@
+{
+  "macos_terminal_preference": "kitty",
+  "linux_terminal_preference": "kitty",
+  "windows_terminal_preference": "wt",
+  "first_run_notice": {
+    "macos": false,
+    "windows": false,
+    "linux": false
+  }
+}
