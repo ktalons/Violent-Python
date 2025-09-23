@@ -632,7 +632,11 @@ class SetupFrame(ttk.Frame):
         self.output.configure(state="normal")
         self.output.delete("1.0", "end")
         self._append_log(f"$ {' '.join(cmd)}\n\n")
-        self.install_btn.config(state="disabled")
+        # Disable the Install button while pip runs; will be re-enabled in _pump()
+        try:
+            self.install_os_btn.config(state="disabled")
+        except Exception:
+            pass
 
         def reader():
             try:
@@ -656,6 +660,7 @@ class SetupFrame(ttk.Frame):
 
 
     def install_os_packages(self):
+        # Always run both: OS package setup (terminal + Tk) and pip install for the selected OS file.
         if self.selected_os == "macos":
             # Install the preferred terminal via Homebrew in a new terminal window
             pref = getattr(self.controller, "preferences", {}).get("macos_terminal_preference", "kitty")
@@ -690,6 +695,8 @@ class SetupFrame(ttk.Frame):
                     self.controller.save_prefs()
                 except Exception:
                     pass
+            # Also install pip requirements for the selected OS
+            self.install_pip_for_selected()
         elif self.selected_os == "windows":
             # Install the preferred terminal via winget in a new window
             wpref = getattr(self.controller, "preferences", {}).get("windows_terminal_preference", "wt")
@@ -716,6 +723,8 @@ class SetupFrame(ttk.Frame):
                     self.controller.save_prefs()
                 except Exception:
                     pass
+            # Also install pip requirements for the selected OS
+            self.install_pip_for_selected()
         elif self.selected_os == "linux":
             # Try to install the preferred terminal via the available package manager (sudo may prompt)
             pref = getattr(self.controller, "preferences", {}).get("linux_terminal_preference", "kitty")
@@ -746,12 +755,14 @@ class SetupFrame(ttk.Frame):
                     "kitty": "Kitty", "wezterm": "WezTerm", "alacritty": "Alacritty",
                     "gnome-terminal": "GNOME Terminal", "konsole": "Konsole", "xterm": "Xterm"
                 }.get(pref, pref)
-                self.status.config(text=f"We launched {pretty} to complete first-run initialization. If you didn’t see it, click 'Install Required Only' again or open the app once manually.")
+                self.status.config(text=f"We launched {pretty} to complete first-run initialization. If you didn’t see it, click 'Install' again or open the app once manually.")
                 flags["linux"] = True
                 try:
                     self.controller.save_prefs()
                 except Exception:
                     pass
+            # Also install pip requirements for the selected OS
+            self.install_pip_for_selected()
         else:
             messagebox.showinfo("Install OS packages", "Select an OS first.")
 
@@ -1047,144 +1058,159 @@ class SetupFrame(ttk.Frame):
         target = APP_ROOT.resolve()
         tmp_dir = Path(tempfile.gettempdir())
         script_path = tmp_dir / f"vp_uninstall_{int(time.time())}.py"
-        content = (
-            "#!/usr/bin/env python3\n"
-            "import os, sys, shutil, time, stat, subprocess, ctypes\n"
-            "from pathlib import Path\n\n"
-            f"TARGET = Path({repr(str(target))})\n"
-            "FOLDER_NAME = TARGET.name\n"
-            "print('[Uninstall] Safe Uninstall helper')\n"
-            "print(f'[Uninstall] Target: {TARGET}')\n\n"
-            "# Safety checks — refuse dangerous paths\n"
-            "def safe_path(p: Path) -> bool:\n"
-            "    try:\n"
-            "        p = p.resolve()\n"
-            "    except Exception:\n"
-            "        return False\n"
-            "    if not p.exists() or not p.is_dir():\n"
-            "        return False\n"
-            "    # Never operate on root, user home, or extremely short paths\n"
-            "    if p == Path('/') or p == Path.home() or len(str(p)) < 8:\n"
-            "        return False\n"
-            "    # Project markers\n"
-            "    markers = [(p / 'main.py').exists(), (p / 'README.md').exists()]\n"
-            "    if not all(markers):\n"
-            "        return False\n"
-            "    return True\n\n"
-            "if not safe_path(TARGET):\n"
-            "    print('[Uninstall] Target path failed safety checks (missing markers or unsafe path). Aborting.')\n"
-            "    sys.exit(1)\n\n"
-            "# Double confirmation: require exact folder name\n"
-            "try:\n"
-            "    typed = input(f\"Type the project folder name to confirm: {FOLDER_NAME} \")\n"
-            "except EOFError:\n"
-            "    typed = ''\n"
-            "if typed.strip() != FOLDER_NAME:\n"
-            "    print('[Uninstall] Confirmation did not match. Aborting.')\n"
-            "    sys.exit(1)\n\n"
-            "def try_send2trash(path: Path) -> bool:\n"
-            "    try:\n"
-            "        import send2trash  # optional, if present\n"
-            "        send2trash.send2trash(str(path))\n"
-            "        return True\n"
-            "    except Exception:\n"
-            "        return False\n\n"
-            "def macos_trash(path: Path) -> bool:\n"
-            "    # Use Finder to move to Trash\n"
-            "    try:\n"
-            "        script = [\n"
-            "            'tell application \"Finder\"',\n"
-            "            f'delete POSIX file \"{str(path).replace("\\\\", "\\\\\\\\").replace("\"", "\\\\\"")}\"',\n"
-            "            'end tell',\n"
-            "        ]\n"
-            "        args = ['osascript']\n"
-            "        for line in script:\n"
-            "            args += ['-e', line]\n"
-            "        subprocess.check_call(args)\n"
-            "        return True\n"
-            "    except Exception:\n"
-            "        return False\n\n"
-            "def windows_trash(path: Path) -> bool:\n"
-            "    # Use SHFileOperation with FOF_ALLOWUNDO to send to Recycle Bin\n"
-            "    try:\n"
-            "        from ctypes import wintypes\n"
-            "        FO_DELETE = 3\n"
-            "        FOF_ALLOWUNDO = 0x0040\n"
-            "        FOF_NOCONFIRMATION = 0x0010\n"
-            "        class SHFILEOPSTRUCTW(ctypes.Structure):\n"
-            "            _fields_ = [\n"
-            "                ('hwnd', wintypes.HWND),\n"
-            "                ('wFunc', wintypes.UINT),\n"
-            "                ('pFrom', wintypes.LPCWSTR),\n"
-            "                ('pTo', wintypes.LPCWSTR),\n"
-            "                ('fFlags', wintypes.UINT),\n"
-            "                ('fAnyOperationsAborted', wintypes.BOOL),\n"
-            "                ('hNameMappings', wintypes.LPVOID),\n"
-            "                ('lpszProgressTitle', wintypes.LPCWSTR),\n"
-            "            ]\n"
-            "        shfo = SHFILEOPSTRUCTW()\n"
-            "        shfo.hwnd = None\n"
-            "        shfo.wFunc = FO_DELETE\n"
-            "        # double-NULL-terminated path list\n"
-            "        shfo.pFrom = str(path) + '\\0\\0'\n"
-            "        shfo.pTo = None\n"
-            "        shfo.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION\n"
-            "        res = ctypes.windll.shell32.SHFileOperationW(ctypes.byref(shfo))\n"
-            "        return res == 0\n"
-            "    except Exception:\n"
-            "        return False\n\n"
-            "def linux_trash(path: Path) -> bool:\n"
-            "    # Try gio trash (GNOME/FreeDesktop). Fall back to safe rename if not available.\n"
-            "    try:\n"
-            "        if shutil.which('gio'):\n"
-            "            subprocess.check_call(['gio', 'trash', str(path)])\n"
-            "            return True\n"
-            "    except Exception:\n"
-            "        pass\n"
-            "    return False\n\n"
-            "def safe_rename(path: Path) -> Path | None:\n"
-            "    parent = path.parent\n"
-            "    ts = time.strftime('%Y%m%d_%H%M%S')\n"
-            "    new = parent / f"{path.name}.DELETE_ME_{ts}"\n"
-            "    # Avoid collisions\n"
-            "    i = 0\n"
-            "    while new.exists() and i < 50:\n"
-            "        i += 1\n"
-            "        new = parent / f"{path.name}.DELETE_ME_{ts}_{i}"\n"
-            "    try:\n"
-            "        path.rename(new)\n"
-            "        return new\n"
-            "    except Exception:\n"
-            "        return None\n\n"
-            "# Allow GUI to close any file handles\n"
-            "time.sleep(1.0)\n\n"
-            "moved = False\n"
-            "# First, try optional send2trash if installed\n"
-            "if try_send2trash(TARGET):\n"
-            "    print('[Uninstall] Moved to Trash via send2trash.')\n"
-            "    moved = True\n"
-            "else:\n"
-            "    if sys.platform.startswith('darwin'):\n"
-            "        if macos_trash(TARGET):\n"
-            "            print('[Uninstall] Moved to Trash (macOS Finder).')\n"
-            "            moved = True\n"
-            "    elif os.name == 'nt':\n"
-            "        if windows_trash(TARGET):\n"
-            "            print('[Uninstall] Moved to Recycle Bin (Windows API).')\n"
-            "            moved = True\n"
-            "    else:\n"
-            "        if linux_trash(TARGET):\n"
-            "            print('[Uninstall] Moved to Trash (gio).')\n"
-            "            moved = True\n\n"
-            "if not moved:\n"
-            "    print('[Uninstall] Trash not available. Performing non-destructive safe rename...')\n"
-            "    renamed = safe_rename(TARGET)\n"
-            "    if renamed is None:\n"
-            "        print('[Uninstall] Safe rename failed. No changes were made. Aborting.')\n"
-            "        sys.exit(1)\n"
-            "    print(f'[Uninstall] Folder renamed to: {renamed}')\n\n"
-            "print('[Uninstall] Complete. You can restore from Trash or delete the renamed folder manually.')\n"
-        )
+        content_lines = [
+            "#!/usr/bin/env python3",
+            "import os, sys, shutil, time, stat, subprocess, ctypes",
+            "from pathlib import Path",
+            "",
+            f"TARGET = Path({repr(str(target))})",
+            "FOLDER_NAME = TARGET.name",
+            "print('[Uninstall] Safe Uninstall helper')",
+            "print(f'[Uninstall] Target: {TARGET}')",
+            "",
+            "# Safety checks — refuse dangerous paths",
+            "def safe_path(p: Path) -> bool:",
+            "    try:",
+            "        p = p.resolve()",
+            "    except Exception:",
+            "        return False",
+            "    if not p.exists() or not p.is_dir():",
+            "        return False",
+            "    # Never operate on root, user home, or extremely short paths",
+            "    if p == Path('/') or p == Path.home() or len(str(p)) < 8:",
+            "        return False",
+            "    # Project markers",
+            "    markers = [(p / 'main.py').exists(), (p / 'README.md').exists()]",
+            "    if not all(markers):",
+            "        return False",
+            "    return True",
+            "",
+            "if not safe_path(TARGET):",
+            "    print('[Uninstall] Target path failed safety checks (missing markers or unsafe path). Aborting.')",
+            "    sys.exit(1)",
+            "",
+            "# Double confirmation: require exact folder name",
+            "try:",
+            "    typed = input(f\"Type the project folder name to confirm: {FOLDER_NAME} \")",
+            "except EOFError:",
+            "    typed = ''",
+            "if typed.strip() != FOLDER_NAME:",
+            "    print('[Uninstall] Confirmation did not match. Aborting.')",
+            "    sys.exit(1)",
+            "",
+            "def try_send2trash(path: Path) -> bool:",
+            "    try:",
+            "        import send2trash  # optional, if present",
+            "        send2trash.send2trash(str(path))",
+            "        return True",
+            "    except Exception:",
+            "        return False",
+            "",
+            "def macos_trash(path: Path) -> bool:",
+            "    # Use Finder to move to Trash",
+            "    try:",
+            "        esc = repr(str(path))",
+            "        script = [",
+            "            'tell application \"Finder\"',",
+            "            'delete POSIX file ' + esc,",
+            "            'end tell',",
+            "        ]",
+            "        args = ['osascript']",
+            "        for line in script:",
+            "            args += ['-e', line]",
+            "        subprocess.check_call(args)",
+            "        return True",
+            "    except Exception:",
+            "        return False",
+            "",
+            "def windows_trash(path: Path) -> bool:",
+            "    # Use SHFileOperation with FOF_ALLOWUNDO to send to Recycle Bin",
+            "    try:",
+            "        from ctypes import wintypes",
+            "        FO_DELETE = 3",
+            "        FOF_ALLOWUNDO = 0x0040",
+            "        FOF_NOCONFIRMATION = 0x0010",
+            "        class SHFILEOPSTRUCTW(ctypes.Structure):",
+            "            _fields_ = [",
+            "                ('hwnd', wintypes.HWND),",
+            "                ('wFunc', wintypes.UINT),",
+            "                ('pFrom', wintypes.LPCWSTR),",
+            "                ('pTo', wintypes.LPCWSTR),",
+            "                ('fFlags', wintypes.UINT),",
+            "                ('fAnyOperationsAborted', wintypes.BOOL),",
+            "                ('hNameMappings', wintypes.LPVOID),",
+            "                ('lpszProgressTitle', wintypes.LPCWSTR),",
+            "            ]",
+            "        shfo = SHFILEOPSTRUCTW()",
+            "        shfo.hwnd = None",
+            "        shfo.wFunc = FO_DELETE",
+            "        # double-NULL-terminated path list",
+            "        shfo.pFrom = str(path) + '\\0\\0'",
+            "        shfo.pTo = None",
+            "        shfo.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION",
+            "        res = ctypes.windll.shell32.SHFileOperationW(ctypes.byref(shfo))",
+            "        return res == 0",
+            "    except Exception:",
+            "        return False",
+            "",
+            "def linux_trash(path: Path) -> bool:",
+            "    # Try gio trash (GNOME/FreeDesktop). Fall back to safe rename if not available.",
+            "    try:",
+            "        if shutil.which('gio'):",
+            "            subprocess.check_call(['gio', 'trash', str(path)])",
+            "            return True",
+            "    except Exception:",
+            "        pass",
+            "    return False",
+            "",
+            "def safe_rename(path: Path) -> Path | None:",
+            "    parent = path.parent",
+            "    ts = time.strftime('%Y%m%d_%H%M%S')",
+            "    new = parent / (path.name + '.DELETE_ME_' + ts)",
+            "    # Avoid collisions",
+            "    i = 0",
+            "    while new.exists() and i < 50:",
+            "        i += 1",
+            "        new = parent / (path.name + '.DELETE_ME_' + ts + '_' + str(i))",
+            "    try:",
+            "        path.rename(new)",
+            "        return new",
+            "    except Exception:",
+            "        return None",
+            "",
+            "# Allow GUI to close any file handles",
+            "time.sleep(1.0)",
+            "",
+            "moved = False",
+            "# First, try optional send2trash if installed",
+            "if try_send2trash(TARGET):",
+            "    print('[Uninstall] Moved to Trash via send2trash.')",
+            "    moved = True",
+            "else:",
+            "    if sys.platform.startswith('darwin'):",
+            "        if macos_trash(TARGET):",
+            "            print('[Uninstall] Moved to Trash (macOS Finder).')",
+            "            moved = True",
+            "    elif os.name == 'nt':",
+            "        if windows_trash(TARGET):",
+            "            print('[Uninstall] Moved to Recycle Bin (Windows API).')",
+            "            moved = True",
+            "    else:",
+            "        if linux_trash(TARGET):",
+            "            print('[Uninstall] Moved to Trash (gio).')",
+            "            moved = True",
+            "",
+            "if not moved:",
+            "    print('[Uninstall] Trash not available. Performing non-destructive safe rename...')",
+            "    renamed = safe_rename(TARGET)",
+            "    if renamed is None:",
+            "        print('[Uninstall] Safe rename failed. No changes were made. Aborting.')",
+            "        sys.exit(1)",
+            "    print(f'[Uninstall] Folder renamed to: {renamed}')",
+            "",
+            "print('[Uninstall] Complete. You can restore from Trash or delete the renamed folder manually.')",
+        ]
+        content = "\n".join(content_lines) + "\n"
         script_path.write_text(content, encoding="utf-8")
         os.chmod(script_path, 0o700)
         return script_path

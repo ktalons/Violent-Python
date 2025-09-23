@@ -107,6 +107,7 @@ Violent-Python/
 
 The desktop app lets you:
 - Install/preview OS-specific requirements
+- Install (single click): sets up the preferred terminal for your selected OS and runs `pip install -r` on the displayed `requirements-<os>.txt`
 - Discover `./assignments/*/*.py` automatically
 - Preview syntax-highlighted code
 - Run a selected script in your preferred terminal

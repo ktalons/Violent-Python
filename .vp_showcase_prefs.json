@@ -1,9 +1,9 @@
 {
-  "macos_terminal_preference": "kitty",
+  "macos_terminal_preference": "wezterm",
   "linux_terminal_preference": "kitty",
   "windows_terminal_preference": "wt",
   "first_run_notice": {
-    "macos": false,
+    "macos": true,
     "windows": false,
     "linux": false
   }
