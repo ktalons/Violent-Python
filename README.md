@@ -132,6 +132,29 @@ Recovery and final cleanup:
 - If moved to Trash/Recycle Bin, restore or empty your Trash as desired.
 - If safely renamed, you can manually inspect and delete the renamed folder when ready.
 
+### Smoke test: Safe Uninstall
+
+Run the cross-platform smoke test without touching your repo:
+- macOS/Linux:
+  ```bash
+  python3 scripts/e2e_uninstall_smoke.py
+  ```
+- Windows (PowerShell):
+  ```powershell
+  py -3 scripts\e2e_uninstall_smoke.py
+  ```
+
+What it does:
+- Creates temporary dummy project folders with markers (main.py, README.md).
+- Validates safety checks and attempts to move to Trash/Recycle Bin when supported.
+- Falls back to a non-destructive safe rename if Trash is unavailable.
+- Exits 0 on success for all OS cases; non-zero otherwise.
+
+Notes:
+- macOS may prompt for Automation permission to allow Finder control.
+- Linux requires gio for Trash support; otherwise uses rename fallback.
+- Windows uses the Recycle Bin API when run natively on Windows.
+
 ## 🖼️ Screenshots
 
 - Splash: assets/screenshots/splash.png
