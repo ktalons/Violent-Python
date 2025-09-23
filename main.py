@@ -12,7 +12,7 @@ import shutil
 import json
 from pathlib import Path
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, simpledialog
 import logging
 import tempfile
 import time
@@ -994,26 +994,42 @@ class SetupFrame(ttk.Frame):
         self.status.config(text="Preferences reset to defaults.")
 
     def uninstall_cleanup(self):
-        # Confirm action with the user
-        if not messagebox.askyesno(
-            "Uninstall and Cleanup",
-            "This will permanently delete the entire Violent-Python project folder, including virtual environments, preferences, and generated files.\n\nAre you sure you want to proceed?",
+        # Safer uninstall flow:
+        # 1) Inform user that this will move the project to Trash/Recycle Bin when possible
+        #    or safely rename the folder, NOT permanently delete it.
+        # 2) Require typed confirmation of the folder name.
+        folder_name = APP_ROOT.name
+        ok = messagebox.askokcancel(
+            "Safe Uninstall",
+            "This will move the entire project folder to the OS Trash/Recycle Bin when possible.\n"
+            "If Trash is unavailable, the folder will be safely renamed (DELETE_ME_...).\n\n"
+            "System tools (Python, Homebrew, winget) are not modified.\n\n"
+            "Click OK to continue.",
             icon="warning",
-            default="no",
-        ):
+            default="cancel",
+        )
+        if not ok:
+            return
+        typed = simpledialog.askstring(
+            "Confirm Safe Uninstall",
+            f"Type the project folder name to confirm: {folder_name}",
+            parent=self,
+        )
+        if not typed or typed.strip() != folder_name:
+            messagebox.showinfo("Safe Uninstall", "Confirmation did not match. Uninstall canceled.")
             return
         try:
             script_path = self._create_uninstall_script()
         except Exception as e:
-            messagebox.showerror("Uninstall and Cleanup", f"Failed to prepare uninstall script: {e}")
+            messagebox.showerror("Safe Uninstall", f"Failed to prepare uninstall script: {e}")
             return
         try:
             self._launch_uninstall_script(script_path)
         except Exception as e:
-            messagebox.showerror("Uninstall and Cleanup", f"Failed to launch uninstall: {e}")
+            messagebox.showerror("Safe Uninstall", f"Failed to launch uninstall: {e}")
             return
         messagebox.showinfo(
-            "Uninstall and Cleanup",
+            "Safe Uninstall",
             "A terminal window will open to perform the uninstall. This app will now exit so removal can proceed.",
         )
         try:
@@ -1023,52 +1039,151 @@ class SetupFrame(ttk.Frame):
             self.controller.destroy()
 
     def _create_uninstall_script(self) -> Path:
-        # Write a temporary self-contained Python script that safely removes the repo after the app exits
+        # Write a temporary, self-contained Python script that performs a safe uninstall:
+        # - Double confirmation
+        # - Strong safety checks
+        # - Prefer moving to OS Trash/Recycle Bin
+        # - Fallback to a non-destructive safe rename (DELETE_ME_...)
         target = APP_ROOT.resolve()
         tmp_dir = Path(tempfile.gettempdir())
         script_path = tmp_dir / f"vp_uninstall_{int(time.time())}.py"
         content = (
             "#!/usr/bin/env python3\n"
-            "import os, sys, shutil, time, stat\n"
+            "import os, sys, shutil, time, stat, subprocess, ctypes\n"
             "from pathlib import Path\n\n"
             f"TARGET = Path({repr(str(target))})\n"
-            "print(f\"[Uninstall] Target: {TARGET}\")\n"
-            "# Safety checks\n"
-            "if not TARGET.exists() or not TARGET.is_dir():\n"
-            "    print('[Uninstall] Target does not exist or is not a directory. Aborting.')\n"
-            "    sys.exit(1)\n"
-            "if TARGET == Path('/') or TARGET == Path.home() or len(str(TARGET)) < 5:\n"
-            "    print('[Uninstall] Target path failed safety checks. Aborting.')\n"
-            "    sys.exit(1)\n"
-            "# Require expected project markers to reduce risk\n"
-            "if not (TARGET / 'main.py').exists() or not (TARGET / 'README.md').exists():\n"
-            "    print('[Uninstall] Expected project markers not found (main.py/README.md). Aborting.')\n"
-            "    sys.exit(1)\n\n"
-            "# Small delay to allow GUI to exit\n"
-            "time.sleep(1.0)\n\n"
-            "def on_rm_error(func, path, exc_info):\n"
+            "FOLDER_NAME = TARGET.name\n"
+            "print('[Uninstall] Safe Uninstall helper')\n"
+            "print(f'[Uninstall] Target: {TARGET}')\n\n"
+            "# Safety checks — refuse dangerous paths\n"
+            "def safe_path(p: Path) -> bool:\n"
             "    try:\n"
-            "        os.chmod(path, stat.S_IWRITE)\n"
-            "        func(path)\n"
+            "        p = p.resolve()\n"
             "    except Exception:\n"
-            "        pass\n\n"
-            "attempts = 0\n"
-            "while attempts < 5:\n"
-            "    try:\n"
-            "        shutil.rmtree(TARGET, onerror=on_rm_error)\n"
-            "        print('[Uninstall] Removal complete.')\n"
-            "        break\n"
-            "    except PermissionError:\n"
-            "        attempts += 1\n"
-            "        print(f'[Uninstall] Permission error; retrying in 1s (attempt {attempts})...')\n"
-            "        time.sleep(1.0)\n"
-            "    except Exception as e:\n"
-            "        print(f'[Uninstall] Failed: {e}')\n"
-            "        sys.exit(1)\n"
-            "else:\n"
-            "    print('[Uninstall] Unable to remove target after multiple attempts.')\n"
+            "        return False\n"
+            "    if not p.exists() or not p.is_dir():\n"
+            "        return False\n"
+            "    # Never operate on root, user home, or extremely short paths\n"
+            "    if p == Path('/') or p == Path.home() or len(str(p)) < 8:\n"
+            "        return False\n"
+            "    # Project markers\n"
+            "    markers = [(p / 'main.py').exists(), (p / 'README.md').exists()]\n"
+            "    if not all(markers):\n"
+            "        return False\n"
+            "    return True\n\n"
+            "if not safe_path(TARGET):\n"
+            "    print('[Uninstall] Target path failed safety checks (missing markers or unsafe path). Aborting.')\n"
             "    sys.exit(1)\n\n"
-            "print('[Uninstall] Done.')\n"
+            "# Double confirmation: require exact folder name\n"
+            "try:\n"
+            "    typed = input(f\"Type the project folder name to confirm: {FOLDER_NAME} \")\n"
+            "except EOFError:\n"
+            "    typed = ''\n"
+            "if typed.strip() != FOLDER_NAME:\n"
+            "    print('[Uninstall] Confirmation did not match. Aborting.')\n"
+            "    sys.exit(1)\n\n"
+            "def try_send2trash(path: Path) -> bool:\n"
+            "    try:\n"
+            "        import send2trash  # optional, if present\n"
+            "        send2trash.send2trash(str(path))\n"
+            "        return True\n"
+            "    except Exception:\n"
+            "        return False\n\n"
+            "def macos_trash(path: Path) -> bool:\n"
+            "    # Use Finder to move to Trash\n"
+            "    try:\n"
+            "        script = [\n"
+            "            'tell application \"Finder\"',\n"
+            "            f'delete POSIX file \"{str(path).replace("\\\\", "\\\\\\\\").replace("\"", "\\\\\"")}\"',\n"
+            "            'end tell',\n"
+            "        ]\n"
+            "        args = ['osascript']\n"
+            "        for line in script:\n"
+            "            args += ['-e', line]\n"
+            "        subprocess.check_call(args)\n"
+            "        return True\n"
+            "    except Exception:\n"
+            "        return False\n\n"
+            "def windows_trash(path: Path) -> bool:\n"
+            "    # Use SHFileOperation with FOF_ALLOWUNDO to send to Recycle Bin\n"
+            "    try:\n"
+            "        from ctypes import wintypes\n"
+            "        FO_DELETE = 3\n"
+            "        FOF_ALLOWUNDO = 0x0040\n"
+            "        FOF_NOCONFIRMATION = 0x0010\n"
+            "        class SHFILEOPSTRUCTW(ctypes.Structure):\n"
+            "            _fields_ = [\n"
+            "                ('hwnd', wintypes.HWND),\n"
+            "                ('wFunc', wintypes.UINT),\n"
+            "                ('pFrom', wintypes.LPCWSTR),\n"
+            "                ('pTo', wintypes.LPCWSTR),\n"
+            "                ('fFlags', wintypes.UINT),\n"
+            "                ('fAnyOperationsAborted', wintypes.BOOL),\n"
+            "                ('hNameMappings', wintypes.LPVOID),\n"
+            "                ('lpszProgressTitle', wintypes.LPCWSTR),\n"
+            "            ]\n"
+            "        shfo = SHFILEOPSTRUCTW()\n"
+            "        shfo.hwnd = None\n"
+            "        shfo.wFunc = FO_DELETE\n"
+            "        # double-NULL-terminated path list\n"
+            "        shfo.pFrom = str(path) + '\\0\\0'\n"
+            "        shfo.pTo = None\n"
+            "        shfo.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION\n"
+            "        res = ctypes.windll.shell32.SHFileOperationW(ctypes.byref(shfo))\n"
+            "        return res == 0\n"
+            "    except Exception:\n"
+            "        return False\n\n"
+            "def linux_trash(path: Path) -> bool:\n"
+            "    # Try gio trash (GNOME/FreeDesktop). Fall back to safe rename if not available.\n"
+            "    try:\n"
+            "        if shutil.which('gio'):\n"
+            "            subprocess.check_call(['gio', 'trash', str(path)])\n"
+            "            return True\n"
+            "    except Exception:\n"
+            "        pass\n"
+            "    return False\n\n"
+            "def safe_rename(path: Path) -> Path | None:\n"
+            "    parent = path.parent\n"
+            "    ts = time.strftime('%Y%m%d_%H%M%S')\n"
+            "    new = parent / f"{path.name}.DELETE_ME_{ts}"\n"
+            "    # Avoid collisions\n"
+            "    i = 0\n"
+            "    while new.exists() and i < 50:\n"
+            "        i += 1\n"
+            "        new = parent / f"{path.name}.DELETE_ME_{ts}_{i}"\n"
+            "    try:\n"
+            "        path.rename(new)\n"
+            "        return new\n"
+            "    except Exception:\n"
+            "        return None\n\n"
+            "# Allow GUI to close any file handles\n"
+            "time.sleep(1.0)\n\n"
+            "moved = False\n"
+            "# First, try optional send2trash if installed\n"
+            "if try_send2trash(TARGET):\n"
+            "    print('[Uninstall] Moved to Trash via send2trash.')\n"
+            "    moved = True\n"
+            "else:\n"
+            "    if sys.platform.startswith('darwin'):\n"
+            "        if macos_trash(TARGET):\n"
+            "            print('[Uninstall] Moved to Trash (macOS Finder).')\n"
+            "            moved = True\n"
+            "    elif os.name == 'nt':\n"
+            "        if windows_trash(TARGET):\n"
+            "            print('[Uninstall] Moved to Recycle Bin (Windows API).')\n"
+            "            moved = True\n"
+            "    else:\n"
+            "        if linux_trash(TARGET):\n"
+            "            print('[Uninstall] Moved to Trash (gio).')\n"
+            "            moved = True\n\n"
+            "if not moved:\n"
+            "    print('[Uninstall] Trash not available. Performing non-destructive safe rename...')\n"
+            "    renamed = safe_rename(TARGET)\n"
+            "    if renamed is None:\n"
+            "        print('[Uninstall] Safe rename failed. No changes were made. Aborting.')\n"
+            "        sys.exit(1)\n"
+            "    print(f'[Uninstall] Folder renamed to: {renamed}')\n\n"
+            "print('[Uninstall] Complete. You can restore from Trash or delete the renamed folder manually.')\n"
         )
         script_path.write_text(content, encoding="utf-8")
         os.chmod(script_path, 0o700)

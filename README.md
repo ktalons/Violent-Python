@@ -115,6 +115,23 @@ The GUI stores a small JSON preferences file at `.vp_showcase_prefs.json` for te
 
 ---
 
+## 🧹 Safe Uninstall
+
+The Uninstall button in the Setup screen now performs a safe uninstall across macOS, Linux, and Windows:
+
+- Two-step confirmation: you must type the exact project folder name to proceed.
+- Prefers moving the project folder to the OS Trash/Recycle Bin:
+  - macOS: uses Finder to move the folder to Trash.
+  - Windows: uses the Recycle Bin API.
+  - Linux: uses gio trash when available.
+- If Trash/Recycle Bin is unavailable, it falls back to a non-destructive safe rename: <folder>.DELETE_ME_YYYYmmdd_HHMMSS (nothing is permanently deleted).
+- Strong safety checks ensure the operation only targets this repo (looks for markers like main.py and README.md; refuses root/home/very-short paths).
+- It never modifies system tools or packages (Python, Homebrew, winget, etc.).
+
+Recovery and final cleanup:
+- If moved to Trash/Recycle Bin, restore or empty your Trash as desired.
+- If safely renamed, you can manually inspect and delete the renamed folder when ready.
+
 ## 🖼️ Screenshots
 
 - Splash: assets/screenshots/splash.png
