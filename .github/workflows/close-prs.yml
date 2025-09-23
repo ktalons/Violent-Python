@@ -1,11 +1,35 @@
 name: Close Pull Requests
+
 on:
   pull_request_target:
-    types: [opened]
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
+  contents: read
+
 jobs:
   close:
     runs-on: ubuntu-latest
     steps:
-      - uses: superbrothers/close-pull-request@v3
+      - uses: actions/github-script@v7
         with:
-          comment: "This showcase repo doesn’t accept pull requests."
+          script: |
+            const pr = context.payload.pull_request;
+            const msg = [
+              "This showcase repository doesn’t accept pull requests.",
+              "Please fork the repo to propose changes. Thanks!"
+            ].join(" ");
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: msg
+            });
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              state: "closed"
+            });
