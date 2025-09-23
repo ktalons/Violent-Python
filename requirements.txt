@@ -1,5 +1,10 @@
 # Base Python dependencies for Violent-Python Showcase
 # pip will ignore comments and blank lines
+#
+# NOTE: The GUI's single-click Install uses the OS-specific file
+# (requirements-<os>.txt) based on the OS you select on the Setup page.
+# Use "Customize Requirements" to edit that OS-specific file before clicking Install.
+# This base file remains minimal and is typically NOT used by the single-click Install flow.
 
 # Image handling and optional GIF support
 pillow

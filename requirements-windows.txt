@@ -1,5 +1,8 @@
 # Windows requirements for Violent-Python Showcase
 #
+# Used by the GUI's single-click Install when Windows is selected on the Setup page.
+# You can edit this file via "Customize Requirements" before clicking Install.
+#
 # This file lists Python packages and suggests OS-level tools to improve the
 # experience when running scripts from the GUI.
 #
