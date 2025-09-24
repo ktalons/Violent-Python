@@ -1,9 +1,5 @@
 # 🐍 Violent Python: Cybersecurity Script Showcase
 
-<p align="center">
-  <img src="assets/logo.png" alt="Violent Python logo" width="160" />
-</p>
-
 <p align="left">
   <a href="#"><img alt="Python" src="https://img.shields.io/badge/Python-3.11+-blue"></a>
   <a href="#"><img alt="Course" src="https://img.shields.io/badge/Course-CYBV%20473-%23CC0033"></a>
@@ -13,9 +9,11 @@
   <a href="#"><img alt="OS: Linux" src="https://img.shields.io/badge/OS-Linux-success"></a>
   <a href="#"><img alt="OS: macOS" src="https://img.shields.io/badge/OS-macOS-lightgrey"></a>
   <a href="#"><img alt="OS: Windows" src="https://img.shields.io/badge/OS-Windows-blue"></a>
+  <img src="assets/pylogo.png" alt="Violent Python logo" width="50"> <p align="right">
 </p>
 
-A curated portfolio of small, self-contained Python scripts for cybersecurity coursework — with a Tkinter GUI (“Showcase”) to browse, preview, and run them.
+A curated portfolio of small, self-contained Python scripts for cybersecurity coursework 
+with a Tkinter GUI <br> to browse, preview, and run them.
 
 > Educational use only. Do not use these scripts to violate policies or laws.
 
@@ -57,7 +55,7 @@ A curated portfolio of small, self-contained Python scripts for cybersecurity co
 Notes
 - _The Setup screen can preview and install OS-specific requirement files (requirements-<os>.txt)._ 
 - _The Showcase screen auto-discovers `./assignments/*/*.py`, previews code, and runs selected scripts in your preferred terminal._
-- _Splash image: looks for `assets/logo.gif` (animated when Pillow is installed), then `assets/logo.png`, then `assets/pylogo.png`._
+- _Splash image: looks for (animated) `assets/logo.gif` first, then `assets/logo.png`._
 
 ---
 
@@ -181,11 +179,11 @@ Violent-Python/
 ---
 
 ## 🖼️ Screenshots
-
-- Splash: [assets/screenshots/Splash.png](assets/screenshots/Splash.png)
-- Setup: [assets/screenshots/Setup.png](assets/screenshots/Setup.png)
-- Showcase: [assets/screenshots/Showcase.png](assets/screenshots/Showcase.png)
-
+<img width="1052" height="795" alt="Splash" src="https://github.com/user-attachments/assets/2303ff64-47d0-4ddb-b9cb-694433bf375a" />
+---
+<img width="1052" height="795" alt="Setup" src="https://github.com/user-attachments/assets/97626466-c655-4b75-8181-8772c21ef9b8" />
+---
+<img width="1052" height="795" alt="Showcase" src="https://github.com/user-attachments/assets/43447c79-d834-4cdf-a1c9-314b5a946dd2" />
 ---
 
 ## 🧩 Troubleshooting
@@ -202,7 +200,7 @@ Violent-Python/
 - How do I run scripts without the GUI?
   - Use the commands in the Assignments table from the repo root. A virtual environment is optional but recommended.
 - Why isn’t the splash animated?
-  - Animated splash requires `assets/logo.gif` and Pillow installed. If only `assets/logo.png` or `assets/pylogo.png` exists or Pillow isn’t installed, it will show a static image.
+  - Animated splash requires `assets/logo.gif` and Pillow installed. If only `assets/logo.png` exists or Pillow isn’t installed, it will show a static image.
 - Where do screenshots go?
   - Place screenshots in `assets/screenshots/`. The README references `Splash.png`, `Setup.png`, and `Showcase.png`.
 - How do I uninstall safely?
