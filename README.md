@@ -15,7 +15,7 @@
 A curated portfolio of small, self-contained Python scripts for cybersecurity coursework 
 with a Tkinter GUI <br> to browse, preview, and run them.
 
-> Educational use only. Do not use these scripts to violate policies or laws.
+> _For educational use only. Do not use these scripts to violate policies or laws._ ⚠️
 
 ---
 
@@ -29,7 +29,7 @@ with a Tkinter GUI <br> to browse, preview, and run them.
 - 🖼️ Screenshots
 - 🧩 Troubleshooting
 - ❓ FAQ
-- 📖 Academic integrity and responsible use
+- 📖 Academic integrity
 - 📜 License
 
 ---
@@ -95,11 +95,11 @@ Preferences are stored in `.vp_showcase_prefs.json`.
   - macOS: Finder Trash
   - Windows: Recycle Bin API
   - Linux: `gio trash` when available
-- If Trash is unavailable, falls back to a non-destructive safe rename: `<folder>.DELETE_ME_YYYYmmdd_HHMMSS`.
-- Strong safety checks ensure the target is this repo (looks for markers like `main.py` and `README.md`; refuses root/home/very-short paths).
+- If Trash is unavailable, falls back to a non-destructive safe rename: `<folder>.DELETE_ME_YYYYmmdd`.
+- Strong safety checks ensure the target is this repo (looks for markers like `main.py` and `README.md`.
 - Never modifies system tools or packages (Python, Homebrew, winget, etc.).
 
-Smoke test (no changes to your repo):
+Smoke test available:
 
 - macOS/Linux:
   ```bash
