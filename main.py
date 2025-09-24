@@ -407,17 +407,17 @@ class SetupFrame(ttk.Frame):
         # Help labels for per-OS preferences (packed when OS is selected)
         self.macos_pref_help = ttk.Label(
             self,
-            text="Supported: Kitty, WezTerm, Alacritty. Install uses Homebrew; Run uses your selection first with fallbacks.",
+            text="Tip: To customize requirement.txt click button, modify .txt file and save. Then click Install.",
             foreground="#666",
         )
         self.linux_pref_help = ttk.Label(
             self,
-            text="Supported: Kitty, WezTerm, Alacritty, GNOME Terminal, Konsole, Xterm. Install uses your selection via apt/dnf/pacman; Run uses it first with fallbacks.",
+            text="Tip: To customize requirement.txt click button, modify .txt file and save. Then click Install.",
             foreground="#666",
         )
         self.win_pref_help = ttk.Label(
             self,
-            text="Supported: Windows Terminal (wt), Kitty, WezTerm. Install uses winget; Run uses your selection first with fallbacks.",
+            text="Tip: To customize requirement.txt click button, modify .txt file and save. Then click Install.",
             foreground="#666",
         )
 
@@ -1002,7 +1002,7 @@ class SetupFrame(ttk.Frame):
         except Exception:
             pass
         self._update_os_tools_ui()
-        self.status.config(text="Preferences reset to defaults.")
+        self.status.config(text="Preferences reset to default settings.")
 
     def uninstall_cleanup(self):
         # Safer uninstall flow:
@@ -1012,9 +1012,9 @@ class SetupFrame(ttk.Frame):
         folder_name = APP_ROOT.name
         ok = messagebox.askokcancel(
             "Safe Uninstall",
-            "This will move the entire project folder to the OS Trash/Recycle Bin when possible.\n"
-            "If Trash is unavailable, the folder will be safely renamed (DELETE_ME_...).\n\n"
-            "System tools (Python, Homebrew, winget) are not modified.\n\n"
+            "WARNING: entire project folder will move to Trash.\n"
+            "If Trash fails folder will be renamed (DELETE_ME_).\n\n"
+            "System tools are never modified.\n\n"
             "Click OK to continue.",
             icon="warning",
             default="cancel",
@@ -1022,7 +1022,7 @@ class SetupFrame(ttk.Frame):
         if not ok:
             return
         typed = simpledialog.askstring(
-            "Confirm Safe Uninstall",
+            "Are you Sure?",
             f"Type the project folder name to confirm: {folder_name}",
             parent=self,
         )
