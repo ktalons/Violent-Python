@@ -27,8 +27,8 @@ except Exception:
 
 APP_ROOT = Path(__file__).resolve().parent
 # Markers used to identify and later close terminals opened by this app
-WINDOW_MARKER = "VP-Showcase"
-CONTENT_MARKER = "[VP-SHOWCASE]"
+WINDOW_MARKER = "Violent Python Showcase"
+CONTENT_MARKER = "[PYTHON SCRIPT RUNNING]"
 
 # Basic logging (only configure if not already configured by caller)
 if not logging.getLogger().handlers:
@@ -172,7 +172,7 @@ class SplashFrame(ttk.Frame):
         title = ttk.Label(self.footer, text="Violent Python Showcase", font=("Segoe UI", 20, "bold"))
         title.pack(pady=(6, 0))
 
-        subtitle = ttk.Label(self.footer, text="Terminal muscle, GUI ease.", font=("Segoe UI", 12))
+        subtitle = ttk.Label(self.footer, text="Terminal muscle + GUI ease.", font=("Segoe UI", 12))
         subtitle.pack(pady=(6, 12))
 
         buttons = ttk.Frame(self.footer)
@@ -278,7 +278,7 @@ class SetupFrame(ttk.Frame):
         header.pack(side="left")
         ttk.Button(topbar, text="⚠ Uninstall", command=self.uninstall_cleanup, style="Danger.TButton", cursor="hand2").pack(side="right")
 
-        desc = ttk.Label(self, text="Install dependencies from requirements.txt and prepare your environment.")
+        desc = ttk.Label(self, text="Install required dependencies from requirements.txt and prepare your environment.")
         desc.pack(anchor="w", padx=12, pady=(0, 12))
 
         # OS selection row
@@ -365,7 +365,7 @@ class SetupFrame(ttk.Frame):
             "kitty": "Kitty",
             "wezterm": "WezTerm",
             "alacritty": "Alacritty",
-            "gnome-terminal": "GNOME Terminal",
+            "gnome-terminal": "GNOME",
             "konsole": "Konsole",
             "xterm": "Xterm",
         }
@@ -407,17 +407,17 @@ class SetupFrame(ttk.Frame):
         # Help labels for per-OS preferences (packed when OS is selected)
         self.macos_pref_help = ttk.Label(
             self,
-            text="Tip: To customize requirement.txt click button, modify .txt file and save. Then click Install.",
+            text="Tip: To customize the requirement.txt click button, modify .txt file and save. Then click Install.",
             foreground="#666",
         )
         self.linux_pref_help = ttk.Label(
             self,
-            text="Tip: To customize requirement.txt click button, modify .txt file and save. Then click Install.",
+            text="Tip: To customize the requirement.txt click button, modify .txt file and save. Then click Install.",
             foreground="#666",
         )
         self.win_pref_help = ttk.Label(
             self,
-            text="Tip: To customize requirement.txt click button, modify .txt file and save. Then click Install.",
+            text="Tip: To customize the requirement.txt click button, modify .txt file and save. Then click Install.",
             foreground="#666",
         )
 
@@ -681,7 +681,7 @@ class SetupFrame(ttk.Frame):
                 "if command -v brew >/dev/null 2>&1; then "
                 f"{install_line}{launch_line}"
                 "else echo 'Homebrew not found. Install from https://brew.sh'; fi; "
-                "echo; echo 'If prompted by macOS, click Open to allow the app to run.'; "
+                "echo; echo 'If prompted by macOS, click Open to allow the terminal to run.'; "
                 "echo 'Press Enter to close'; read"
             )
             self._run_os_cmd_in_terminal(cmd)
@@ -689,7 +689,7 @@ class SetupFrame(ttk.Frame):
             flags = self.controller.preferences.setdefault("first_run_notice", {"macos": False, "windows": False, "linux": False})
             if not flags.get("macos", False):
                 term_label = {"kitty": "Kitty", "wezterm": "WezTerm", "alacritty": "Alacritty"}.get(pref, pref)
-                self.status.config(text=f"We launched {term_label} to complete first-run permissions. If you didn’t see it, click 'Install' again or open the app once manually.")
+                self.status.config(text=f"We launched {term_label} to complete first-run permissions. If terminal didn't open automatically try opening manually before attempting re-installing.")
                 flags["macos"] = True
                 try:
                     self.controller.save_prefs()
@@ -717,7 +717,7 @@ class SetupFrame(ttk.Frame):
             flags = self.controller.preferences.setdefault("first_run_notice", {"macos": False, "windows": False, "linux": False})
             if not flags.get("windows", False):
                 shown = {"wt": "Windows Terminal", "kitty": "Kitty", "wezterm": "WezTerm"}.get(wpref, "Windows Terminal")
-                self.status.config(text=f"We launched {shown} to complete first-run initialization. If you didn’t see it, click 'Install' again or open the app once manually.")
+                self.status.config(text=f"We launched {shown} to complete first-run initialization. If terminal didn't open automatically try opening manually before attempting re-installing.")
                 flags["windows"] = True
                 try:
                     self.controller.save_prefs()
@@ -740,12 +740,12 @@ class SetupFrame(ttk.Frame):
                 "else echo 'No supported package manager found. Install your preferred terminal and Tk manually.'; fi; "
                 # Proactively open the preferred terminal once if available
                 f"if command -v {pkg} >/dev/null 2>&1; then "
-                f"if [ '{pkg}' = 'kitty' ]; then kitty --hold bash -lc \"echo Initialized; read -p 'Press Enter to close'\"; "
-                f"elif [ '{pkg}' = 'wezterm' ]; then wezterm start -- bash -lc \"echo Initialized; read -p 'Press Enter to close'\"; "
-                f"elif [ '{pkg}' = 'alacritty' ]; then alacritty -e bash -lc \"echo Initialized; read -p 'Press Enter to close'\"; "
-                f"elif [ '{pkg}' = 'gnome-terminal' ]; then gnome-terminal --window -- bash -lc \"echo Initialized; read -p 'Press Enter to close'\"; "
-                f"elif [ '{pkg}' = 'konsole' ]; then konsole --new-window -e bash -lc \"echo Initialized; read -p 'Press Enter to close'\"; "
-                f"elif [ '{pkg}' = 'xterm' ]; then xterm -e bash -lc \"echo Initialized; read -p 'Press Enter to close'\"; fi; fi; "
+                f"if [ '{pkg}' = 'kitty' ]; then kitty --hold bash -lc \"echo Initialized; read -p 'Installed: Kitty terminal. Press enter to close installation...'\"; "
+                f"elif [ '{pkg}' = 'wezterm' ]; then wezterm start -- bash -lc \"echo Initialized; read -p 'Installed: Wezterm terminal. Press enter to close installation...'\"; "
+                f"elif [ '{pkg}' = 'alacritty' ]; then alacritty -e bash -lc \"echo Initialized; read -p 'Installed: Alacritty terminal. Press enter to close installation...'\"; "
+                f"elif [ '{pkg}' = 'gnome-terminal' ]; then gnome-terminal --window -- bash -lc \"echo Initialized; read -p 'Installed: GNOME terminal. Press enter to close installation...'\"; "
+                f"elif [ '{pkg}' = 'konsole' ]; then konsole --new-window -e bash -lc \"echo Initialized; read -p 'Installed: konsole terminal. Press enter to close installation...'\"; "
+                f"elif [ '{pkg}' = 'xterm' ]; then xterm -e bash -lc \"echo Initialized; read -p 'Installed: xterm terminal. Press enter to close installation...'\"; fi; fi; "
                 "echo; read -p 'Press Enter to close'"
             )
             self._run_os_cmd_in_terminal(sh)
@@ -753,9 +753,9 @@ class SetupFrame(ttk.Frame):
             if not flags.get("linux", False):
                 pretty = {
                     "kitty": "Kitty", "wezterm": "WezTerm", "alacritty": "Alacritty",
-                    "gnome-terminal": "GNOME Terminal", "konsole": "Konsole", "xterm": "Xterm"
+                    "gnome-terminal": "GNOME", "konsole": "Konsole", "xterm": "Xterm"
                 }.get(pref, pref)
-                self.status.config(text=f"We launched {pretty} to complete first-run initialization. If you didn’t see it, click 'Install' again or open the app once manually.")
+                self.status.config(text=f"We launched {pretty} to complete first-run initialization. If terminal didn't open automatically try opening manually before attempting re-installing.")
                 flags["linux"] = True
                 try:
                     self.controller.save_prefs()
@@ -858,20 +858,20 @@ class SetupFrame(ttk.Frame):
             pref = getattr(self.controller, "preferences", {}).get("linux_terminal_preference", "kitty")
             checks = [
                 ("kitty", self._check_cmd("kitty")),
+                ("konsole", self._check_cmd("konsole")),
+                ("gnome-terminal", self._check_cmd("gnome-terminal")),
                 ("wezterm", self._check_cmd("wezterm")),
                 ("alacritty", self._check_cmd("alacritty")),
-                ("gnome-terminal", self._check_cmd("gnome-terminal")),
-                ("konsole", self._check_cmd("konsole")),
                 ("xterm", self._check_cmd("xterm")),
             ]
             status_map = {name: ok for name, ok in checks}
             # Preferred line
             pretty = {
                 "kitty": "Kitty",
+                "konsole": "Konsole",
+                "gnome-terminal": "GNOME",
                 "wezterm": "WezTerm",
                 "alacritty": "Alacritty",
-                "gnome-terminal": "GNOME Terminal",
-                "konsole": "Konsole",
                 "xterm": "Xterm",
             }
             lines.append(f"Preferred — {pretty.get(pref, pref)}: {'✓' if status_map.get(pref, False) else '✗'}")
@@ -955,7 +955,7 @@ class SetupFrame(ttk.Frame):
             try:
                 req.touch()
             except Exception as e:
-                messagebox.showerror("Open requirements.txt", f"Could not create {req}: {e}")
+                messagebox.showerror("Open requirements.txt", f"Unable to open {req}: {e}")
                 return
         try:
             if self.selected_os == "windows" or os.name == "nt":
@@ -1032,12 +1032,12 @@ class SetupFrame(ttk.Frame):
         try:
             script_path = self._create_uninstall_script()
         except Exception as e:
-            messagebox.showerror("Safe Uninstall", f"Failed to prepare uninstall script: {e}")
+            messagebox.showerror("Safe Uninstall", f"Failed to prepare uninstall command: {e}")
             return
         try:
             self._launch_uninstall_script(script_path)
         except Exception as e:
-            messagebox.showerror("Safe Uninstall", f"Failed to launch uninstall: {e}")
+            messagebox.showerror("Safe Uninstall", f"Failed to launch uninstall command: {e}")
             return
         messagebox.showinfo(
             "Safe Uninstall",
@@ -1065,10 +1065,10 @@ class SetupFrame(ttk.Frame):
             "",
             f"TARGET = Path({repr(str(target))})",
             "FOLDER_NAME = TARGET.name",
-            "print('[Uninstall] Safe Uninstall helper')",
-            "print(f'[Uninstall] Target: {TARGET}')",
+            "print('Safe Uninstall helper')",
+            "print(f'Deleting: {TARGET}')",
             "",
-            "# Safety checks — refuse dangerous paths",
+            "# Safety check - refuses dangerous paths",
             "def safe_path(p: Path) -> bool:",
             "    try:",
             "        p = p.resolve()",
@@ -1086,10 +1086,10 @@ class SetupFrame(ttk.Frame):
             "    return True",
             "",
             "if not safe_path(TARGET):",
-            "    print('[Uninstall] Target path failed safety checks (missing markers or unsafe path). Aborting.')",
+            "    print('[Uninstall] Target path failed safety checks. Aborting.')",
             "    sys.exit(1)",
             "",
-            "# Double confirmation: require exact folder name",
+            "# Type exact folder name to confirm",
             "try:",
             "    typed = input(f\"Type the project folder name to confirm: {FOLDER_NAME} \")",
             "except EOFError:",
@@ -1184,20 +1184,20 @@ class SetupFrame(ttk.Frame):
             "moved = False",
             "# First, try optional send2trash if installed",
             "if try_send2trash(TARGET):",
-            "    print('[Uninstall] Moved to Trash via send2trash.')",
+            "    print('[Uninstall] Sending to Trash.')",
             "    moved = True",
             "else:",
             "    if sys.platform.startswith('darwin'):",
             "        if macos_trash(TARGET):",
-            "            print('[Uninstall] Moved to Trash (macOS Finder).')",
+            "            print('[Uninstall] Moved to Trash.')",
             "            moved = True",
             "    elif os.name == 'nt':",
             "        if windows_trash(TARGET):",
-            "            print('[Uninstall] Moved to Recycle Bin (Windows API).')",
+            "            print('[Uninstall] Moved to Recycle Bin.')",
             "            moved = True",
             "    else:",
             "        if linux_trash(TARGET):",
-            "            print('[Uninstall] Moved to Trash (gio).')",
+            "            print('[Uninstall] Moved to Trash.')",
             "            moved = True",
             "",
             "if not moved:",
@@ -1218,15 +1218,15 @@ class SetupFrame(ttk.Frame):
     def _launch_uninstall_script(self, script_path: Path):
         # Run the uninstall script in a new terminal window depending on OS
         if sys.platform.startswith("darwin"):
-            cmd = f"{shlex.quote(sys.executable)} {shlex.quote(str(script_path))}; echo; echo 'Press Enter to close'; read"
+            cmd = f"{shlex.quote(sys.executable)} {shlex.quote(str(script_path))}; echo; echo 'Successful. Press Enter to shutdown'; read"
             self._macos_run_in_terminal(cmd)
         elif os.name == "nt":
             py = sys.executable.replace('/', '\\')
             sp = str(script_path).replace('/', '\\')
-            ps_cmd = f"& '{py}' '{sp}'; Write-Host ''; Read-Host 'Press Enter to close'"
+            ps_cmd = f"& '{py}' '{sp}'; Write-Host ''; Read-Host 'Successful. Press Enter to shutdown'"
             self._windows_run_in_terminal(ps_cmd)
         else:
-            cmd = f"{shlex.quote(sys.executable)} {shlex.quote(str(script_path))}; echo; read -p 'Press Enter to close'"
+            cmd = f"{shlex.quote(sys.executable)} {shlex.quote(str(script_path))}; echo; read -p 'Successful. Press Enter to shutdown'"
             self._linux_run_in_terminal(cmd)
 
     def _linux_run_in_terminal(self, sh_cmd: str):
@@ -1258,7 +1258,7 @@ class SetupFrame(ttk.Frame):
                 return
             except FileNotFoundError:
                 continue
-        messagebox.showerror("Install OS packages", "No supported terminal emulator found. Install kitty/alacritty/wezterm/gnome-terminal/konsole/xterm.")
+        messagebox.showerror("No supported terminal emulator found. Install supported OS packages on Setup screen.")
 
     def terminate_running_process(self):
         if self.proc and self.proc.poll() is None:
@@ -1291,7 +1291,7 @@ class ShowcaseFrame(ttk.Frame):
         main.add(left, weight=1)
         main.add(right, weight=3)
 
-        ttk.Label(left, text="Assignments (auto-discovered from ./assignments/*/*.py)").pack(anchor="w")
+        ttk.Label(left, text="Assignments:".pack(anchor="w")
         self.listbox = tk.Listbox(left, height=20, exportselection=False)
         self.listbox.pack(fill="both", expand=True, pady=(4, 8))
         self.listbox.bind("<<ListboxSelect>>", self.on_list_select)
@@ -1299,7 +1299,7 @@ class ShowcaseFrame(ttk.Frame):
         self.scripts = []
 
         # Code preview area
-        self.path_label = ttk.Label(right, text="Code preview: select a script on the left", foreground="#666")
+        self.path_label = ttk.Label(right, text="Code preview: select an option to preview", foreground="#666")
         self.path_label.pack(anchor="w")
         code_frame = ttk.Frame(right)
         code_frame.pack(fill="both", expand=True)
@@ -1313,7 +1313,7 @@ class ShowcaseFrame(ttk.Frame):
         self._setup_code_tags()
         self.code_text.config(state="disabled")
 
-        hint = ttk.Label(right, text="Tip: Use 'Run in Terminal' for full interactivity (prompts, input, colors).", foreground="#666")
+        hint = ttk.Label(right, text="Tip: Use 'Run in Terminal' for full interactivity.", foreground="#666")
         hint.pack(anchor="w", pady=(4, 6))
 
         # Footer with Close button at the bottom-right
@@ -1483,7 +1483,7 @@ class ShowcaseFrame(ttk.Frame):
         self.code_text.delete("1.0", "end")
         self._clear_highlight_tags()
         if not path or not path.exists():
-            self.path_label.config(text="Code preview: select a script on the left")
+            self.path_label.config(text="Code preview: select an option to preview")
             self.code_text.config(state="disabled")
             return
         try:
@@ -1498,7 +1498,7 @@ class ShowcaseFrame(ttk.Frame):
     def run_in_terminal(self):
         path = self._selected_script_path()
         if not path or not path.exists():
-            messagebox.showerror("Run in Terminal", "Select a valid script to run.")
+            messagebox.showerror("Run in Terminal", "Select a python script to run.")
             return
         try:
             if sys.platform == "darwin":
@@ -1545,7 +1545,7 @@ class ShowcaseFrame(ttk.Frame):
             f"cd {shlex.quote(str(repo))}; "
             f"if [ -f .venv/bin/activate ]; then source .venv/bin/activate; fi; "
             f"{shlex.quote(sys.executable)} {shlex.quote(str(rel))}; "
-            f"echo; echo 'Press Enter to close'; read"
+            f"echo; echo 'Successful. Press Enter to shutdown'; read"
         )
         # Prefer macOS terminals similar to Linux: kitty -> wezterm -> alacritty
         pref = getattr(self.controller, "preferences", {}).get("macos_terminal_preference", "kitty")
@@ -1574,7 +1574,7 @@ class ShowcaseFrame(ttk.Frame):
                 except Exception:
                     pass
                 return
-        messagebox.showerror("Run in Terminal", "No supported macOS terminal found (kitty/wezterm/alacritty). Install one from Setup first.")
+        messagebox.showerror("Run in Terminal", "No supported macOS terminal found. Install one from Setup first.")
 
     def _run_in_windows_terminal(self, script_path: Path):
         repo = str(APP_ROOT)
@@ -1585,7 +1585,7 @@ class ShowcaseFrame(ttk.Frame):
             f"Set-Location -Path '{repo}'; "
             f"if (Test-Path .venv\\Scripts\\Activate.ps1) {{ . .venv\\Scripts\\Activate.ps1 }}; "
             f"& '{py}' '{rel}'; "
-            f"Write-Host ''; Read-Host 'Press Enter to close'"
+            f"Write-Host ''; Read-Host 'Successful. Press Enter to shutdown'"
         )
         wpref = getattr(self.controller, "preferences", {}).get("windows_terminal_preference", "wt")
         # Try preferred first
@@ -1650,7 +1650,7 @@ class ShowcaseFrame(ttk.Frame):
             f"cd {shlex.quote(str(repo))}; "
             f"if [ -f .venv/bin/activate ]; then source .venv/bin/activate; fi; "
             f"{shlex.quote(sys.executable)} {shlex.quote(str(rel))}; "
-            f"echo; echo 'Press Enter to close'; read"
+            f"echo; echo 'Successful. Press Enter to shutdown'; read"
         )
         # Prefer user-selected terminal; fallback to others in order
         base = ["kitty", "wezterm", "alacritty", "gnome-terminal", "konsole", "xterm", "x-terminal-emulator"]
@@ -1682,7 +1682,7 @@ class ShowcaseFrame(ttk.Frame):
                 return
             except FileNotFoundError:
                 continue
-        raise RuntimeError("No supported terminal emulator found. Install kitty/wezterm/alacritty/gnome-terminal/konsole/xterm.")
+        raise RuntimeError("No supported terminal emulator found. Install supported terminal listed on Setup screen")
 
     def terminate_running_process(self):
         # No in-app subprocess is kept running in this mode
