@@ -1,28 +1,22 @@
-# Linux requirements for Violent-Python Showcase
+# Linux requirements — validation only (no install commands)
+# This file documents the checks the GUI/installer should run on Linux.
+# The menu bar will trigger the user's chosen terminal/PM option to install
+# anything missing; do not put install commands here.
 #
-# Used by the GUI's single-click Install when Linux is selected on the Setup page.
-# You can edit this file via "Customize Requirements" before clicking Install.
+# Python packages should be managed in the unified cross-platform file:
+#   requirements.txt
 #
-# This file lists Python packages and suggests OS-level tools to improve the
-# experience when running scripts from the GUI.
+# Validation checks (examples):
+# 1) Verify Python and Tkinter (needed for the Tkinter GUI)
+#    CHECK: python3 -c "import tkinter" >/dev/null 2>&1
 #
-# OS packages (Debian/Ubuntu):
-#   sudo apt-get update && sudo apt-get install -y xterm python3-tk
-# Optional terminals:
-#   sudo apt-get install -y kitty wezterm alacritty gnome-terminal konsole
+# 2) Verify a terminal is available (menu will offer choices)
+#    CHECK: command -v kitty wezterm alacritty gnome-terminal konsole xterm >/dev/null 2>&1
+#       - acceptable terminals include: kitty, wezterm, alacritty, gnome-terminal, konsole, or xterm
 #
-# OS packages (Fedora/RHEL):
-#   sudo dnf install -y xterm python3-tkinter
-# Optional terminals:
-#   sudo dnf install -y kitty wezterm alacritty gnome-terminal konsole
+# 3) (Optional) Detect available package manager for later install step (handled by menu action)
+#    CHECK-ANY: command -v apt-get dnf pacman zypper >/dev/null 2>&1
+#       - the GUI can branch behavior based on which is present
 #
-# OS packages (Arch/Manjaro):
-#   sudo pacman -S --noconfirm xterm tk
-# Optional terminals:
-#   sudo pacman -S --noconfirm kitty wezterm alacritty gnome-terminal konsole
-#
-# Python packages (installed with pip):
-# Pillow is optional; enables animated GIF splash and image handling
-pillow
-# PrettyTable used by assignments/05_pil_search_images.py
-prettytable
+# Add or modify CHECK/CHECK-ANY lines above as your GUI expects. All lines are comments for pip; the
+# GUI/installer should parse and execute the checks as needed.
