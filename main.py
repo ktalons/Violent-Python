@@ -1291,7 +1291,7 @@ class ShowcaseFrame(ttk.Frame):
         main.add(left, weight=1)
         main.add(right, weight=3)
 
-        ttk.Label(left, text="Assignments:".pack(anchor="w"))
+        ttk.Label(left, text="Assignments:").pack(anchor="w")
         self.listbox = tk.Listbox(left, height=20, exportselection=False)
         self.listbox.pack(fill="both", expand=True, pady=(4, 8))
         self.listbox.bind("<<ListboxSelect>>", self.on_list_select)
