@@ -12,7 +12,7 @@
   <img src="assets/pylogo.png" alt="Violent Python logo" width="50"> <p align="right">
 </p>
 
-A curated portfolio of small, self-contained Python scripts for cybersecurity coursework with a Tkinter GUI <br> to browse, preview, and run them.
+A curated portfolio of small, self-contained Python scripts for cybersecurity coursework with a Tkinter GUI to browse, preview, and run them.
 
 > _For educational use only. Do not use these scripts to violate policies or laws._ ⚠️
 
