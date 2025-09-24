@@ -1514,16 +1514,6 @@ class ShowcaseFrame(ttk.Frame):
         # Escape for inclusion inside a double-quoted AppleScript string
         return s.replace("\\", "\\\\").replace('"', '\\"')
 
-    def _has_iterm2(self) -> bool:
-        # Check common install locations for iTerm2
-        candidates = [
-            Path("/Applications/iTerm.app"),
-            Path("/Applications/iTerm2.app"),
-            Path.home() / "Applications" / "iTerm.app",
-            Path.home() / "Applications" / "iTerm2.app",
-        ]
-        return any(p.exists() for p in candidates)
-
     def _has_kitty_macos(self) -> bool:
         return shutil.which("kitty") is not None or any(p.exists() for p in [
             Path("/Applications/kitty.app"), Path("/Applications/Kitty.app"),

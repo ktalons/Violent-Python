@@ -7,7 +7,7 @@
 # experience when running scripts from the GUI.
 #
 # OS packages (install via Homebrew):
-#   brew install --cask iterm2
+#   # iTerm2 was previously suggested; current preferred terminals are kitty/wezterm/alacritty
 # Optional terminals:
 #   brew install kitty wezterm alacritty
 #
