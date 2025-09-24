@@ -222,3 +222,7 @@ or any applicable laws/policies. Keep submissions independent unless collaborati
 ## 📜 License
 
 This project is licensed under the MIT License — see [LICENSE](LICENSE).
+
+---
+
+See the project [CHANGELOG](CHANGELOG.md) for release notes.
