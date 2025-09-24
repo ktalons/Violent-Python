@@ -1,13 +1,38 @@
-# 🐍 Violent Python: Script Portfolio
+# 🐍 Violent Python: Cybersecurity Script Showcase
 
-[![Python](https://img.shields.io/badge/Python-3.11+-blue)](#)
-[![Course](https://img.shields.io/badge/Course-CYBV%20473-%23CC0033)](#)
-[![Status](https://img.shields.io/badge/Status-Active-green)](#)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+<p align="center">
+  <img src="assets/logo.png" alt="Violent Python logo" width="160" />
+</p>
 
-A curated collection of scripting assignments demonstrating practical Python for cybersecurity coursework. Includes a Tkinter GUI to browse and run scripts.
+<p align="left">
+  <a href="#"><img alt="Python" src="https://img.shields.io/badge/Python-3.11+-blue"></a>
+  <a href="#"><img alt="Course" src="https://img.shields.io/badge/Course-CYBV%20473-%23CC0033"></a>
+  <a href="#"><img alt="Status" src="https://img.shields.io/badge/Status-Active-green"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+  <a href="#"><img alt="GUI: Tkinter" src="https://img.shields.io/badge/GUI-Tkinter-9cf"></a>
+  <a href="#"><img alt="OS: Linux" src="https://img.shields.io/badge/OS-Linux-success"></a>
+  <a href="#"><img alt="OS: macOS" src="https://img.shields.io/badge/OS-macOS-lightgrey"></a>
+  <a href="#"><img alt="OS: Windows" src="https://img.shields.io/badge/OS-Windows-blue"></a>
+</p>
+
+A curated portfolio of small, self-contained Python scripts for cybersecurity coursework — with a Tkinter GUI (“Showcase”) to browse, preview, and run them.
 
 > Educational use only. Do not use these scripts to violate policies or laws.
+
+---
+
+## 📑 Table of contents
+
+- 🚀 Quick start
+- 🧭 Assignments
+- 🖥️ GUI Showcase
+- 📦 Dependencies
+- 🗂️ Repository structure
+- 🖼️ Screenshots
+- 🧩 Troubleshooting
+- ❓ FAQ
+- 📖 Academic integrity and responsible use
+- 📜 License
 
 ---
 
@@ -30,112 +55,54 @@ A curated collection of scripting assignments demonstrating practical Python for
   ```
 
 Notes
-- The Setup screen can preview and install OS-specific requirement files (requirements-<os>.txt).
-- The Showcase screen auto-discovers `*.py` under `./assignments/*/`, previews code, and runs a selected script.
-- Splash image: prefers `assets/logo.gif` (animated when Pillow is installed), then `assets/python-logo.png`.
+- _The Setup screen can preview and install OS-specific requirement files (requirements-<os>.txt)._ 
+- _The Showcase screen auto-discovers `./assignments/*/*.py`, previews code, and runs selected scripts in your preferred terminal._
+- _Splash image: looks for `assets/logo.gif` (animated when Pillow is installed), then `assets/logo.png`, then `assets/pylogo.png`._
 
 ---
 
-## 📦 Dependencies
+## 🧭 Assignments
 
-This repo is mostly standard-library Python; a few scripts use third-party packages:
-- Pillow (optional) for images/splash animation
-- PrettyTable for tabular CLI output (Assignment 05)
+Run any script from the repo root.
 
-OS-specific requirement files are provided:
-- requirements-macos.txt
-- requirements-linux.txt
-- requirements-windows.txt
-
-The generic requirements.txt is intentionally minimal. Use the OS-specific files via the GUI or install the two packages above when needed.
-
----
-
-## 🗂️ Repository structure
-
-```
-Violent-Python/
-├─ main.py                     # Tkinter GUI to run/preview assignments
-├─ start.sh                    # macOS/Linux launcher (creates .venv, checks Tk)
-├─ start.ps1                   # Windows launcher (creates .venv, checks Tk)
-├─ assignments/
-│  ├─ 00_showcase_check/        # GUI pre-flight checks and helpers
-│  │  ├─ show_env.py           # Prints Python/Tk/Pillow availability and versions
-│  │  └─ showcase.py           # Minimal sample to validate GUI runner via terminal
-│  ├─ 01_string_search/
-│  ├─ 02_firewall_parser/
-│  ├─ 03_hashing_forensics/
-│  ├─ 04_file_processor_oop/
-│  ├─ 05_pil_search_images/
-│  ├─ 06_exif_geotag_extractor/
-│  ├─ 07_memory_regex_extract/
-│  ├─ 08_memory_unique_strings/
-│  ├─ 09_web_crawler_scraper/
-│  ├─ 10_tcp_server/
-│  ├─ 11_tcp_client/
-│  ├─ 12_packet_sniffer/
-│  ├─ 13_pcap_asset_mapping/
-│  ├─ 14_lsb_steganography/
-│  ├─ 15_hashtag_collector/
-│  ├─ 16_social_graph_harvest/
-│  ├─ 17_nltk_transcript_analysis/
-│  ├─ 18_mp3_id3_carver/
-│  ├─ 19_virustotal_client/
-│  └─ 20_tbd/
-├─ assets/
-│  ├─ python-logo.png
-│  ├─ screenshots/
-│  │  ├─ splash.png            # add your screenshot
-│  │  ├─ setup.png             # add your screenshot
-│  │  └─ showcase.png          # add your screenshot
-│  └─ week1/
-│     ├─ README.md
-│     └─ redhat.txt            # sample log referenced by assignment 02
-├─ requirements.txt
-├─ requirements-macos.txt
-├─ requirements-linux.txt
-├─ requirements-windows.txt
-├─ .github/workflows/close-prs.yml
-├─ LICENSE
-├─ README.md
-└─ WARP.md
-```
+| ID | Name | Run | Notes |
+|----|------|-----|-------|
+| 00 | <small>Showcase checks</small> | <small>`python3 assignments/00_showcase_check/show_env.py`<br>`python3 assignments/00_showcase_check/showcase.py`</small> | <small>Quick environment and demo scripts</small> |
+| 01 | <small>String search</small> | <small>`python3 assignments/01_string_search/01_string_search.py`</small> | <small>Basic string analysis</small> |
+| 02 | <small>Firewall log parser</small> | <small>`python3 assignments/02_firewall_parser/02_firewall_parser.py [redhat.txt]`</small> | <small>Needs `redhat.txt` in current directory, or pass a path</small> |
+| 03 | <small>Hashing forensics (MD5)</small> | <small>`python3 assignments/03_hashing_forensics/03_hashing_forensics.py [-d <dir>]`</small> | <small>Defaults to `testImages` next to script; target a small folder</small> |
+| 04 | <small>File processor (interactive)</small> | <small>`python3 assignments/04_file_processor_oop/04_file_processor_oop.py`</small> | <small>Prompts for a directory</small> |
+| 05 | <small>Image inspection</small> | <small>`python3 assignments/05_pil_search_images/05_pil_search_images.py`</small> | <small>Install Pillow + PrettyTable first (`-r requirements.txt`)</small> |
+| 06–20 | <small>Placeholders</small> | <small>-</small> | <small>Reserved for future assignments</small> |
 
 ---
 
 ## 🖥️ GUI Showcase (Tkinter)
 
-The desktop app lets you:
-- Install/preview OS-specific requirements
-- Install (single click): sets up the preferred terminal for your selected OS and runs `pip install -r` on the displayed `requirements-<os>.txt`
-- Discover `./assignments/*/*.py` automatically
-- Preview syntax-highlighted code
-- Run a selected script in your preferred terminal
+- Install/preview OS-specific requirements.
+- One-click Install: sets up your preferred terminal per OS and runs `pip install -r` for the selected requirements file.
+- Auto-discovers `./assignments/*/*.py`.
+- Previews syntax-highlighted code.
+- Runs a selected script in your preferred terminal.
 
-The GUI stores a small JSON preferences file at `.vp_showcase_prefs.json` for terminal selection and first-run notices.
+Preferences are stored in `.vp_showcase_prefs.json`.
 
----
+### Safe Uninstall
 
-## 🧹 Safe Uninstall
+<details>
+<summary>How uninstall works (click to expand)</summary>
 
-The Uninstall button in the Setup screen now performs a safe uninstall across macOS, Linux, and Windows:
+- Double confirmation (you must type the exact folder name).
+- Prefers moving the project folder to the OS Trash/Recycle Bin when possible:
+  - macOS: Finder Trash
+  - Windows: Recycle Bin API
+  - Linux: `gio trash` when available
+- If Trash is unavailable, falls back to a non-destructive safe rename: `<folder>.DELETE_ME_YYYYmmdd_HHMMSS`.
+- Strong safety checks ensure the target is this repo (looks for markers like `main.py` and `README.md`; refuses root/home/very-short paths).
+- Never modifies system tools or packages (Python, Homebrew, winget, etc.).
 
-- Two-step confirmation: you must type the exact project folder name to proceed.
-- Prefers moving the project folder to the OS Trash/Recycle Bin:
-  - macOS: uses Finder to move the folder to Trash.
-  - Windows: uses the Recycle Bin API.
-  - Linux: uses gio trash when available.
-- If Trash/Recycle Bin is unavailable, it falls back to a non-destructive safe rename: <folder>.DELETE_ME_YYYYmmdd_HHMMSS (nothing is permanently deleted).
-- Strong safety checks ensure the operation only targets this repo (looks for markers like main.py and README.md; refuses root/home/very-short paths).
-- It never modifies system tools or packages (Python, Homebrew, winget, etc.).
+Smoke test (no changes to your repo):
 
-Recovery and final cleanup:
-- If moved to Trash/Recycle Bin, restore or empty your Trash as desired.
-- If safely renamed, you can manually inspect and delete the renamed folder when ready.
-
-### Smoke test: Safe Uninstall
-
-Run the cross-platform smoke test without touching your repo:
 - macOS/Linux:
   ```bash
   python3 scripts/e2e_uninstall_smoke.py
@@ -145,22 +112,81 @@ Run the cross-platform smoke test without touching your repo:
   py -3 scripts\e2e_uninstall_smoke.py
   ```
 
-What it does:
-- Creates temporary dummy project folders with markers (main.py, README.md).
-- Validates safety checks and attempts to move to Trash/Recycle Bin when supported.
-- Falls back to a non-destructive safe rename if Trash is unavailable.
-- Exits 0 on success for all OS cases; non-zero otherwise.
+</details>
 
-Notes:
-- macOS may prompt for Automation permission to allow Finder control.
-- Linux requires gio for Trash support; otherwise uses rename fallback.
-- Windows uses the Recycle Bin API when run natively on Windows.
+---
+
+## 📦 Dependencies
+
+Mostly standard-library Python. Third-party packages used by some scripts:
+- Pillow (optional) for images/splash animation
+- PrettyTable for tabular CLI output (Assignment 05)
+
+OS-specific requirement files:
+- requirements-macos.txt
+- requirements-linux.txt
+- requirements-windows.txt
+
+The top-level `requirements.txt` is intentionally minimal.
+
+---
+
+## 🗂️ Repository structure
+
+<details>
+<summary>Expand to view</summary>
+
+```
+Violent-Python/
+├─ main.py                     # Tkinter GUI to run/preview assignments
+├─ start.sh                    # macOS/Linux launcher (creates .venv, checks Tk)
+├─ start.ps1                   # Windows launcher (creates .venv, checks Tk)
+├─ assignments/
+│  ├─ 00_showcase_check/
+│  ├─ 01_string_search/
+│  ├─ 02_firewall_parser/
+│  ├─ 03_hashing_forensics/
+│  ├─ 04_file_processor_oop/
+│  ├─ 05_pil_search_images/
+│  ├─ 06_exif_geotag_extractor/   # placeholder
+│  ├─ 07_memory_regex_extract/    # placeholder
+│  ├─ 08_memory_unique_strings/   # placeholder
+│  ├─ 09_web_crawler_scraper/     # placeholder
+│  ├─ 10_tcp_server/              # placeholder
+│  ├─ 11_tcp_client/              # placeholder
+│  ├─ 12_packet_sniffer/          # placeholder
+│  ├─ 13_pcap_asset_mapping/      # placeholder
+│  ├─ 14_lsb_steganography/       # placeholder
+│  ├─ 15_hashtag_collector/       # placeholder
+│  ├─ 16_social_graph_harvest/    # placeholder
+│  ├─ 17_nltk_transcript_analysis/# placeholder
+│  ├─ 18_mp3_id3_carver/          # placeholder
+│  ├─ 19_virustotal_client/       # placeholder
+│  └─ 20_tbd/                     # placeholder
+├─ assets/
+│  ├─ logo.png
+│  ├─ pylogo.png
+│  └─ screenshots/
+│     ├─ Splash.png               # example screenshot
+│     └─ README.md
+├─ requirements*.txt
+├─ .github/workflows/close-prs.yml
+├─ LICENSE
+├─ README.md
+└─ WARP.md
+```
+
+</details>
+
+---
 
 ## 🖼️ Screenshots
 
-- Splash: assets/screenshots/splash.png
-- Setup: assets/screenshots/setup.png
-- Showcase: assets/screenshots/showcase.png
+- Splash: [assets/screenshots/Splash.png](assets/screenshots/Splash.png)
+- Setup: [assets/screenshots/Setup.png](assets/screenshots/Setup.png)
+- Showcase: [assets/screenshots/Showcase.png](assets/screenshots/Showcase.png)
+
+---
 
 ## 🧩 Troubleshooting
 
@@ -168,10 +194,19 @@ Notes:
   - macOS: install Python from python.org or `brew install python`, then recreate `.venv`.
   - Linux: install `python3-tk` (Debian/Ubuntu) or `python3-tkinter` (Fedora/RHEL) and recreate `.venv`.
   - Windows: install Python 3 (includes Tk) and recreate `.venv`.
-- 03_hashing_forensics.py is slow
-  - Run it from a small directory you intend to scan, not the repo root.
-- 02_firewall_parser.py can’t find redhat.txt
-  - Place `redhat.txt` in the current working directory or run the script from where the file lives.
+
+---
+
+## ❓ FAQ
+
+- How do I run scripts without the GUI?
+  - Use the commands in the Assignments table from the repo root. A virtual environment is optional but recommended.
+- Why isn’t the splash animated?
+  - Animated splash requires `assets/logo.gif` and Pillow installed. If only `assets/logo.png` or `assets/pylogo.png` exists or Pillow isn’t installed, it will show a static image.
+- Where do screenshots go?
+  - Place screenshots in `assets/screenshots/`. The README references `Splash.png`, `Setup.png`, and `Showcase.png`.
+- How do I uninstall safely?
+  - In the GUI, use Setup → Uninstall. See “Safe Uninstall” above. It moves the folder to Trash/Recycle Bin when possible, or safely renames it.
 
 ---
 
@@ -183,12 +218,6 @@ or any applicable laws/policies. Keep submissions independent unless collaborati
 
 ---
 
-## 🤝 Contributing
-
-Pull requests are not accepted directly in this repository (see `.github/workflows/close-prs.yml`).
-If you have suggestions, feel free to open an issue or fork the repo and share a link to your changes.
-
----
 
 ## 📜 License
 
