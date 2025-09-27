@@ -1,4 +1,4 @@
-# 🐍 Violent Python: Cybersecurity Script Showcase
+# Violent Python: Cybersecurity Script Showcase <img src="assets/pylogo.png" alt="Violent Python logo" width="50"> <p align="right">
 
 <p align="left">
   <a href="#"><img alt="Python" src="https://img.shields.io/badge/Python-3.11+-blue"></a>
@@ -9,7 +9,6 @@
   <a href="#"><img alt="OS: Linux" src="https://img.shields.io/badge/OS-Linux-success"></a>
   <a href="#"><img alt="OS: macOS" src="https://img.shields.io/badge/OS-macOS-lightgrey"></a>
   <a href="#"><img alt="OS: Windows" src="https://img.shields.io/badge/OS-Windows-blue"></a>
-  <img src="assets/pylogo.png" alt="Violent Python logo" width="50"> <p align="right">
 </p>
 
 A curated portfolio of small, self-contained Python scripts for cybersecurity coursework with a Tkinter GUI to browse, preview, and run them.
