@@ -177,11 +177,11 @@ Violent-Python/
 ---
 
 ## 🖼️ Screenshots
-<img width="1052" height="795" alt="Splash" src="https://github.com/user-attachments/assets/2303ff64-47d0-4ddb-b9cb-694433bf375a" />
+<img width="1052" alt="Splash" src="assets/screenshots/Splash.png" />
 ---
-<img width="1052" height="795" alt="Setup" src="https://github.com/user-attachments/assets/97626466-c655-4b75-8181-8772c21ef9b8" />
+<img width="1052" alt="Setup" src="assets/screenshots/Setup.png" />
 ---
-<img width="1052" height="795" alt="Showcase" src="https://github.com/user-attachments/assets/43447c79-d834-4cdf-a1c9-314b5a946dd2" />
+<img width="1052" alt="Showcase" src="assets/screenshots/Showcase.png" />
 ---
 
 ## 🧩 Troubleshooting
