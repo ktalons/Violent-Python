@@ -206,6 +206,12 @@ Violent-Python/
 
 ---
 
+## 🤝 Contributing
+
+PRs are closed; please fork to propose changes.
+
+---
+
 ## 📖 Academic integrity and responsible use
 
 This repository documents my learning. It should not be used to violate the
