@@ -305,7 +305,10 @@ class SetupFrame(ttk.Frame):
         self.install_os_btn.pack(side="left")
         self.open_req_btn = ttk.Button(self.actions, text="Customize Requirements", command=self.open_selected_requirements_file, state="disabled")
         self.open_req_btn.pack(side="left", padx=8)
-        # Reset on the right
+        # Reset OS file to defaults (left group)
+        self.reset_req_btn = ttk.Button(self.actions, text="Reset Requirements", command=self.reset_requirements_to_defaults, state="disabled")
+        self.reset_req_btn.pack(side="left", padx=8)
+        # Reset preferences on the right
         self.reset_btn = ttk.Button(self.actions, text="Reset", command=self.reset_preferences)
         self.reset_btn.pack(side="right")
 
@@ -505,6 +508,10 @@ class SetupFrame(ttk.Frame):
         # Enable actions
         self.install_os_btn.config(state="normal")
         self.open_req_btn.config(state="normal")
+        try:
+            self.reset_req_btn.config(state="normal")
+        except Exception:
+            pass
         # Update OS tools detection and Install button availability
         self._update_os_tools_ui()
         # Show preview of requirements file
@@ -759,6 +766,65 @@ class SetupFrame(ttk.Frame):
         except Exception:
             # Silently ignore write failures to avoid blocking UI
             pass
+
+    def _default_requirements_content(self, os_name: str) -> str:
+        if os_name == "macos":
+            return (
+                "# Violent-Python requirements (macOS)\n"
+                "# Edit as needed, then click \"Install\" from the Setup page.\n"
+                "# Lines beginning with '#' are comments and ignored by pip.\n"
+                "# Non-comment lines are passed directly to pip as package requirements.\n\n"
+                "# Terminal preference used by the GUI (editable):\n"
+                "# vp:terminal=kitty\n"
+                "# Options: kitty, wezterm, alacritty\n\n"
+                "# Core assignment dependencies\n"
+                "pillow\nprettytable\nrequests\nbeautifulsoup4\n"
+                "# Add more packages below as needed for your environment:\n"
+                "# rich\n# colorama\n"
+            )
+        if os_name == "linux":
+            return (
+                "# Violent-Python requirements (Linux)\n"
+                "# Edit as needed, then click \"Install\" from the Setup page.\n"
+                "# Lines beginning with '#' are comments and ignored by pip.\n"
+                "# Non-comment lines are passed directly to pip as package requirements.\n\n"
+                "# Terminal preference used by the GUI (editable):\n"
+                "# vp:terminal=kitty\n"
+                "# Options: kitty, konsole, gnome-terminal, wezterm, alacritty\n\n"
+                "# Core assignment dependencies\n"
+                "pillow\nprettytable\nrequests\nbeautifulsoup4\n"
+                "# Add more packages below as needed for your environment:\n"
+                "# rich\n# colorama\n"
+            )
+        if os_name == "windows":
+            return (
+                "# Violent-Python requirements (Windows)\n"
+                "# Edit as needed, then click \"Install\" from the Setup page.\n"
+                "# Lines beginning with '#' are comments and ignored by pip.\n"
+                "# Non-comment lines are passed directly to pip as package requirements.\n\n"
+                "# Terminal preference used by the GUI (editable):\n"
+                "# vp:terminal=wt\n"
+                "# Options: kitty, wt, wezterm\n\n"
+                "# Core assignment dependencies\n"
+                "pillow\nprettytable\nrequests\nbeautifulsoup4\n"
+                "# Add more packages below as needed for your environment:\n"
+                "# rich\n# colorama\n"
+            )
+        return "# Edit as needed\n"
+
+    def reset_requirements_to_defaults(self):
+        if not self.selected_os:
+            messagebox.showinfo("Reset OS file", "Select an OS first.")
+            return
+        os_name = self.selected_os
+        req = self.get_selected_requirements_file()
+        tpl = self._default_requirements_content(os_name)
+        try:
+            req.write_text(tpl, encoding="utf-8")
+            self.status.config(text=f"Reset {req.name} to defaults.")
+            self.show_requirements_preview()
+        except Exception as e:
+            messagebox.showerror("Reset OS file", f"Failed to write {req.name}: {e}")
 
 
 

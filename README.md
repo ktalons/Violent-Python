@@ -55,6 +55,12 @@ Notes
 - _The Showcase screen auto-discovers `./assignments/*/*.py`, previews code, and runs selected scripts in your preferred terminal._
 - _Splash image: looks for (animated) `assets/logo.gif` first, then `assets/logo.png`._
 
+Dependency flow
+- The top-level `requirements.txt` is intentionally minimal so the GUI can launch without third‑party installs.
+- Use the Setup page to install OS-specific requirements from one of: `requirements-macos.txt`, `requirements-linux.txt`, `requirements-windows.txt`.
+- Each OS file is editable. The GUI reads a terminal preference from a comment line like `# vp:terminal=kitty` and also writes updates back when you change the preference in the UI.
+- You can reset an OS file back to defaults anytime using the “Reset OS file to defaults” button in the Setup page.
+
 ---
 
 ## 🧭 Assignments
