@@ -209,5 +209,8 @@ __marimo__/
 # macOS Finder artifacts
 .DS_Store
 
+# Project outputs
+output/
+
 # Local GUI preferences
 .vp_showcase_prefs.json

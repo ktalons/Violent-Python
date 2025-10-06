@@ -63,16 +63,16 @@ Run any script from the repo root.
 
 | ID | Name | Run | Notes |
 |----|------|-----|-------|
-| 00 | <small>Showcase checks</small> | <small>`python3 assignments/00_showcase_check/show_env.py`<br>`python3 assignments/00_showcase_check/showcase.py`</small> | <small>Quick environment and demo scripts</small> |
-| 01 | <small>String search</small> | <small>`python3 assignments/01_string_search/01_string_search.py`</small> | <small>Basic string analysis</small> |
-| 02 | <small>Firewall log parser</small> | <small>`python3 assignments/02_firewall_parser/02_firewall_parser.py [redhat.txt]`</small> | <small>Needs `redhat.txt` in current directory, or pass a path</small> |
-| 03 | <small>Hashing forensics (MD5)</small> | <small>`python3 assignments/03_hashing_forensics/03_hashing_forensics.py [-d <dir>]`</small> | <small>Defaults to `testImages` next to script; target a small folder</small> |
-| 04 | <small>File processor (interactive)</small> | <small>`python3 assignments/04_file_processor_oop/04_file_processor_oop.py`</small> | <small>Prompts for a directory</small> |
-| 05 | <small>Image inspection</small> | <small>`python3 assignments/05_pil_search_images/05_pil_search_images.py`</small> | <small>Install Pillow + PrettyTable first (`-r requirements.txt`)</small> |
-| 06 | <small>EXIF geotag extractor</small> | <small>`python3 assignments/06_exif_geotag_extractor/06_exif_geotag_extractor.py`</small> | <small>Scans JPEGs for EXIF GPS; outputs table and CSVs</small> |
-| 07 | <small>Memory regex extract</small> | <small>`python3 assignments/07_memory_regex_extract/07_memory_regex_extract.py assets/test.bin`</small> | <small>Extracts e-mails and URLs from a memory dump; optional JSON</small> |
-| 08 | <small>Memory unique strings</small> | <small>`python3 assignments/08_memory_unique_strings/08_memory_unique_strings.py assets/test.bin`</small> | <small>5–15 letter strings with occurrence counts (PrettyTable)</small> |
-| 09 | <small>Web crawler & scraper</small> | <small>`python3 assignments/09_web_crawler_scraper/09_web_crawler_scraper.py https://example.edu/ --depth 1`</small> | <small>Same-site crawl; prints titles/links; downloads on-site images</small> |
+| 00 | <small><a href="assignments/00_showcase_check/README.md">Showcase checks</a></small> | <small>`python3 assignments/00_showcase_check/show_env.py`<br>`python3 assignments/00_showcase_check/showcase.py`</small> | <small>Quick environment and demo scripts</small> |
+| 01 | <small><a href="assignments/01_string_search/README.md">String search</a></small> | <small>`python3 assignments/01_string_search/01_string_search.py`</small> | <small>Basic string analysis</small> |
+| 02 | <small><a href="assignments/02_firewall_parser/README.md">Firewall log parser</a></small> | <small>`python3 assignments/02_firewall_parser/02_firewall_parser.py [redhat.txt]`</small> | <small>Needs `redhat.txt` in current directory, or pass a path</small> |
+| 03 | <small><a href="assignments/03_hashing_forensics/README.md">Hashing forensics (MD5)</a></small> | <small>`python3 assignments/03_hashing_forensics/03_hashing_forensics.py [-d <dir>]`</small> | <small>Defaults to `testImages` next to script; target a small folder</small> |
+| 04 | <small><a href="assignments/04_file_processor_oop/README.md">File processor (interactive)</a></small> | <small>`python3 assignments/04_file_processor_oop/04_file_processor_oop.py`</small> | <small>Prompts for a directory</small> |
+| 05 | <small><a href="assignments/05_pil_search_images/README.md">Image inspection</a></small> | <small>`python3 assignments/05_pil_search_images/05_pil_search_images.py`</small> | <small>Install Pillow + PrettyTable first (`-r requirements.txt`)</small> |
+| 06 | <small><a href="assignments/06_exif_geotag_extractor/README.md">EXIF geotag extractor</a></small> | <small>`python3 assignments/06_exif_geotag_extractor/06_exif_geotag_extractor.py`</small> | <small>Scans JPEGs for EXIF GPS; outputs table and CSVs</small> |
+| 07 | <small><a href="assignments/07_memory_regex_extract/README.md">Memory regex extract</a></small> | <small>`python3 assignments/07_memory_regex_extract/07_memory_regex_extract.py assets/test.bin`</small> | <small>Extracts e-mails and URLs from a memory dump; optional JSON</small> |
+| 08 | <small><a href="assignments/08_memory_unique_strings/README.md">Memory unique strings</a></small> | <small>`python3 assignments/08_memory_unique_strings/08_memory_unique_strings.py assets/test.bin`</small> | <small>5–15 letter strings with occurrence counts (PrettyTable)</small> |
+| 09 | <small><a href="assignments/09_web_crawler_scraper/README.md">Web crawler & scraper</a></small> | <small>`python3 assignments/09_web_crawler_scraper/09_web_crawler_scraper.py https://example.edu/ --depth 1`</small> | <small>Same-site crawl; prints titles/links; downloads on-site images</small> |
 | 10–20 | <small>Placeholders</small> | <small>-</small> | <small>Reserved for future assignments</small> |
 
 ---
