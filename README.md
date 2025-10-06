@@ -163,7 +163,7 @@ Violent-Python/
 │  ├─ logo.png
 │  ├─ pylogo.png
 │  └─ screenshots/
-│     ├─ Splash.png               # example screenshot
+│     ├─ splash.png               # example screenshot
 │     └─ README.md
 ├─ requirements*.txt
 ├─ .github/workflows/close-prs.yml
@@ -177,11 +177,11 @@ Violent-Python/
 ---
 
 ## 🖼️ Screenshots
-<img width="1052" alt="Splash" src="assets/screenshots/Splash.png" />
+<img width="1052" alt="Splash" src="assets/screenshots/splash.png" />
 ---
-<img width="1052" alt="Setup" src="assets/screenshots/Setup.png" />
+<img width="1052" alt="Setup" src="assets/screenshots/setup.png" />
 ---
-<img width="1052" alt="Showcase" src="assets/screenshots/Showcase.png" />
+<img width="1052" alt="Showcase" src="assets/screenshots/showcase.png" />
 ---
 
 ## 🧩 Troubleshooting
