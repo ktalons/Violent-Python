@@ -1,12 +1,7 @@
-# Python dependencies for Violent-Python Showcase
-# Unified, cross-platform requirements file.
-# Add new package requirements here as they are needed by assignments or the GUI.
-
-# Core tools and libraries
-pip
-pillow
-prettytable
-
-# Add new packages below as more scripts are added.
-# Example:
-# requests>=2.32
+# Violent-Python: minimal requirements
+# This file is intentionally kept empty so a fresh venv can launch the GUI.
+# Use the Setup page to install OS-specific requirements from:
+#   - requirements-macos.txt
+#   - requirements-linux.txt
+#   - requirements-windows.txt
+# You can edit those files to customize packages and terminal preferences.

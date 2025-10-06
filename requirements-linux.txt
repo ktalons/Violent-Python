@@ -1,22 +1,17 @@
-# Linux requirements — validation only (no install commands)
-# This file documents the checks the GUI/installer should run on Linux.
-# The menu bar will trigger the user's chosen terminal/PM option to install
-# anything missing; do not put install commands here.
+# Violent-Python requirements (Linux)
+# Edit as needed, then click "Install" from the Setup page.
+# Lines beginning with '#' are comments and ignored by pip.
+# Non-comment lines are passed directly to pip as package requirements.
 #
-# Python packages should be managed in the unified cross-platform file:
-#   requirements.txt
+# Terminal preference used by the GUI (editable):
+# vp:terminal=kitty
+# Options: kitty, konsole, gnome-terminal, wezterm, alacritty
 #
-# Validation checks (examples):
-# 1) Verify Python and Tkinter (needed for the Tkinter GUI)
-#    CHECK: python3 -c "import tkinter" >/dev/null 2>&1
-#
-# 2) Verify a terminal is available (menu will offer choices)
-#    CHECK: command -v kitty wezterm alacritty gnome-terminal konsole xterm >/dev/null 2>&1
-#       - acceptable terminals include: kitty, wezterm, alacritty, gnome-terminal, konsole, or xterm
-#
-# 3) (Optional) Detect available package manager for later install step (handled by menu action)
-#    CHECK-ANY: command -v apt-get dnf pacman zypper >/dev/null 2>&1
-#       - the GUI can branch behavior based on which is present
-#
-# Add or modify CHECK/CHECK-ANY lines above as your GUI expects. All lines are comments for pip; the
-# GUI/installer should parse and execute the checks as needed.
+# Core assignment dependencies
+pillow
+prettytable
+requests
+beautifulsoup4
+# Add more packages below as needed for your environment:
+# rich
+# colorama

@@ -1,23 +1,17 @@
-# Windows requirements — validation only (no install commands)
-# This file documents the checks the GUI/installer should run on Windows.
-# The menu bar will trigger the user's chosen option to install anything missing;
-# do not put install commands here.
+# Violent-Python requirements (Windows)
+# Edit as needed, then click "Install" from the Setup page.
+# Lines beginning with '#' are comments and ignored by pip.
+# Non-comment lines are passed directly to pip as package requirements.
 #
-# Python packages should be managed in the unified cross-platform file:
-#   requirements.txt
+# Terminal preference used by the GUI (editable):
+# vp:terminal=wt
+# Options: kitty, wt, wezterm
 #
-# Validation checks (examples):
-# 1) Verify Python and Tkinter (needed for the Tkinter GUI)
-#    CHECK: py -3 -c "import tkinter" 2>NUL 1>NUL
-#       - fallback if py launcher is absent:
-#    CHECK: python -c "import tkinter" 2>NUL 1>NUL
-#
-# 2) Verify at least one terminal is available
-#    CHECK-ANY: where wt.exe 2>NUL 1>NUL | where wezterm.exe 2>NUL 1>NUL | where kitty.exe 2>NUL 1>NUL
-#       - acceptable terminals include: Windows Terminal (wt.exe), WezTerm (wezterm.exe), or Kitty (kitty.exe)
-#
-# 3) (Optional) Verify winget availability (for later install step handled by menu action)
-#    CHECK: winget --version 2>NUL 1>NUL
-#
-# Add or modify CHECK/CHECK-ANY lines above as your GUI expects. All lines are comments for pip; the
-# GUI/installer should parse and execute the checks as needed.
+# Core assignment dependencies
+pillow
+prettytable
+requests
+beautifulsoup4
+# Add more packages below as needed for your environment:
+# rich
+# colorama

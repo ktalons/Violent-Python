@@ -350,6 +350,10 @@ class SetupFrame(ttk.Frame):
                 self.controller.save_prefs()
             except Exception:
                 pass
+            try:
+                self._write_terminal_pref_to_requirements("macos", choice)
+            except Exception:
+                pass
             self._update_os_tools_ui()
         self.macos_pref_combo.bind("<<ComboboxSelected>>", on_pref_change)
         self.macos_pref_combo.pack(side="left", padx=8)
@@ -379,6 +383,10 @@ class SetupFrame(ttk.Frame):
                 self.controller.save_prefs()
             except Exception:
                 pass
+            try:
+                self._write_terminal_pref_to_requirements("linux", choice)
+            except Exception:
+                pass
             self._update_os_tools_ui()
         self.linux_pref_combo.bind("<<ComboboxSelected>>", on_linux_pref_change)
         self.linux_pref_combo.pack(side="left", padx=8)
@@ -398,6 +406,10 @@ class SetupFrame(ttk.Frame):
             self.controller.preferences["windows_terminal_preference"] = choice
             try:
                 self.controller.save_prefs()
+            except Exception:
+                pass
+            try:
+                self._write_terminal_pref_to_requirements("windows", choice)
             except Exception:
                 pass
             self._update_os_tools_ui()
@@ -420,6 +432,9 @@ class SetupFrame(ttk.Frame):
             text="Tip: To customize the requirement.txt click button, modify .txt file and save. Then click Install.",
             foreground="#666",
         )
+
+        # Regex for parsing vp:terminal metadata in requirements files
+        self._vp_terminal_re = re.compile(r"^\s*#\s*vp:terminal\s*=\s*([\w\-]+)\s*$", re.IGNORECASE)
 
         text_frame = ttk.Frame(self)
         text_frame.pack(fill="both", expand=True, padx=12, pady=(0, 12))
@@ -473,6 +488,11 @@ class SetupFrame(ttk.Frame):
 
     def choose_os(self, name: str):
         self.selected_os = name
+        # Sync preference from the selected OS requirements file (vp:terminal=...)
+        try:
+            self._sync_pref_from_requirements()
+        except Exception:
+            pass
         # Update button styles (simple visual feedback)
         for btn in (self.btn_linux, self.btn_macos, self.btn_windows):
             btn.state(["!pressed"])  # reset
@@ -600,6 +620,11 @@ class SetupFrame(ttk.Frame):
 
     def show_requirements_preview(self):
         req = self.get_selected_requirements_file()
+        # Re-sync preference from file before showing
+        try:
+            self._sync_pref_from_requirements()
+        except Exception:
+            pass
         try:
             content = req.read_text(encoding="utf-8") if req.exists() else "(No file found)"
         except Exception as e:
@@ -656,6 +681,84 @@ class SetupFrame(ttk.Frame):
 
         threading.Thread(target=reader, daemon=True).start()
         self._pump()
+
+    # --- Requirements metadata helpers ---
+    def _sync_pref_from_requirements(self):
+        req = self.get_selected_requirements_file()
+        if not req.exists():
+            return
+        try:
+            text = req.read_text(encoding="utf-8", errors="ignore").splitlines()
+        except Exception:
+            return
+        found = None
+        for line in text:
+            m = self._vp_terminal_re.match(line)
+            if m:
+                found = m.group(1).strip().lower()
+                break
+        if not found:
+            return
+        # Apply to preferences and UI depending on OS
+        if self.selected_os == "macos" and found in ("kitty", "wezterm", "alacritty"):
+            self.controller.preferences["macos_terminal_preference"] = found
+            try:
+                label = {"kitty": "Kitty", "wezterm": "WezTerm", "alacritty": "Alacritty"}[found]
+                self.macos_pref_var.set(found)
+                self.macos_pref_combo.set(label)
+            except Exception:
+                pass
+        elif self.selected_os == "linux" and found in ("kitty", "konsole", "gnome-terminal", "wezterm", "alacritty"):
+            self.controller.preferences["linux_terminal_preference"] = found
+            try:
+                label = {
+                    "kitty": "Kitty",
+                    "konsole": "Konsole",
+                    "gnome-terminal": "GNOME",
+                    "wezterm": "WezTerm",
+                    "alacritty": "Alacritty",
+                }[found]
+                self.linux_pref_var.set(found)
+                self.linux_pref_combo.set(label)
+            except Exception:
+                pass
+        elif self.selected_os == "windows" and found in ("wt", "kitty", "wezterm"):
+            self.controller.preferences["windows_terminal_preference"] = found
+            try:
+                label = {"wt": "Windows Terminal", "kitty": "Kitty", "wezterm": "WezTerm"}[found]
+                self.win_pref_var.set(found)
+                self.win_pref_combo.set(label)
+            except Exception:
+                pass
+        try:
+            self.controller.save_prefs()
+        except Exception:
+            pass
+
+    def _write_terminal_pref_to_requirements(self, os_name: str, value: str):
+        # Resolve file based on OS name
+        prev = self.selected_os
+        self.selected_os = os_name
+        req = self.get_selected_requirements_file()
+        self.selected_os = prev
+        try:
+            if not req.exists():
+                req.write_text(f"# vp:terminal={value}\n", encoding="utf-8")
+                return
+            text = req.read_text(encoding="utf-8", errors="ignore").splitlines()
+            wrote = False
+            for i, line in enumerate(text):
+                if self._vp_terminal_re.match(line):
+                    text[i] = f"# vp:terminal={value}"
+                    wrote = True
+                    break
+            if not wrote:
+                # Prepend metadata line at top to keep it visible
+                text = [f"# vp:terminal={value}"] + text
+            req.write_text("\n".join(text) + "\n", encoding="utf-8")
+        except Exception:
+            # Silently ignore write failures to avoid blocking UI
+            pass
 
 
 

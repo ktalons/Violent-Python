@@ -1,24 +1,17 @@
-# macOS requirements — validation only (no install commands)
-# This file documents the checks the GUI/installer should run on macOS.
-# The menu bar will trigger the user's chosen terminal option to install
-# anything missing; do not put install commands here.
+# Violent-Python requirements (macOS)
+# Edit as needed, then click "Install" from the Setup page.
+# Lines beginning with '#' are comments and ignored by pip.
+# Non-comment lines are passed directly to pip as package requirements.
 #
-# Python packages should be managed in the unified cross-platform file:
-#   requirements.txt
+# Terminal preference used by the GUI (editable):
+# vp:terminal=kitty
+# Options: kitty, wezterm, alacritty
 #
-# Validation checks (examples):
-# 1) Verify Homebrew is available (used by many macOS setups)
-#    CHECK: command -v brew >/dev/null 2>&1
-#
-# 2) Verify Python and Tkinter (needed for the Tkinter GUI)
-#    CHECK: python3 -c "import tkinter" >/dev/null 2>&1
-#
-# 3) Verify at least one optional terminal is installed (menu will offer choices)
-#    CHECK: test -n "$(command -v kitty wezterm alacritty 2>/dev/null | head -n1)" || test -d "/System/Applications/Utilities/Terminal.app"
-#       - acceptable terminals include: kitty, wezterm, alacritty, or the built-in Terminal.app
-#
-# 4) (Optional) Verify Pillow prerequisites on Apple Silicon (usually handled by wheels)
-#    NOTE: Most users will get prebuilt wheels; no action needed here.
-#
-# Add or modify CHECK lines above as your GUI expects. All lines are comments for pip; the
-# GUI/installer should parse and execute the checks as needed.
+# Core assignment dependencies
+pillow
+prettytable
+requests
+beautifulsoup4
+# Add more packages below as needed for your environment:
+# rich
+# colorama
