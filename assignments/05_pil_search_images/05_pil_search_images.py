@@ -14,7 +14,7 @@ from prettytable import PrettyTable  # pip install prettytable
 # Helper function to find the default directory relative to this script.
 """
 Return the default directory path for test images. This function
-attempts to locate the 'assets/week_4/testImages' directory relative
+attempts to locate the 'assets/testImages' directory relative
 to the script's location, accommodating various project structures.
 If the directory cannot be found, it defaults to a path based on the
 script's parent directory.
@@ -24,16 +24,16 @@ def repo_default_dir() -> Path:
 
     # Attempts to find the repo root by looking for a .git folder
     for parent in [script.parent] + list(script.parents):
-        repo_path = parent / "assignments" / "05_pil_search_images" / "testImages"
+        repo_path = parent / "assets" / "testImages"
         if repo_path.is_dir():
             return repo_path
 
         # If we find a repo root marker, use it even if the folder isn't created yet
         if (parent / ".git").exists():
-            return parent / "assignments" / "05_pil_search_images" / "testImages"
+            return parent / "assets" / "testImages"
 
-    # Fallback: if your script lives in <repo>/assignments/..., step up one level
-    return script.parent.parent / "assignments" / "05_pil_images" / "testImages"
+    # Fallback if no repo root found
+    return script.parent.parent / "assets" / "testImages"
 
 DEFAULT_DIR = repo_default_dir()
 
